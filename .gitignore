@@ -1,5 +1,5 @@
 .vscode
 .venv
-*/__pycache__
+*__pycache__*
 */database.db
 */sqlite.db
