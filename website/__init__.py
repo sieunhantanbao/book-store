@@ -14,9 +14,11 @@ def create_app():
 
     from .views.dashboard import dashboard
     from .views.auth import auth
+    from .views.admin.product_management import admin_product
 
     app.register_blueprint(dashboard, url_prefix = '/')
     app.register_blueprint(auth, url_prefix = '/auth/')
+    app.register_blueprint(admin_product, url_prefix = '/admin/product/' )
 
     from .models.db_models import User
     with app.app_context():

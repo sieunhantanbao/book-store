@@ -17,6 +17,9 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             login_user(user, remember= True)
+            returnUrl = request.args.get('next')
+            if None != returnUrl:
+                return redirect(returnUrl)
             return redirect(url_for('dashboard.home'))
     return render_template('auth/login.html', form=form, user = current_user)
 
