@@ -8,7 +8,7 @@ admin_product = Blueprint('product_management', __name__)
 @login_required
 def list():
     if current_user.is_authenticated:
-         return render_template('admin/product_list.html')
+         return render_template('admin/product_list.html', user = current_user)
     return redirect(url_for('auth.login'))
 
 
