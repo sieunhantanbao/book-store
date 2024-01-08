@@ -1,0 +1,210 @@
+{% extends "admin/admin_layout.html" %} 
+{% block title %} Book create {% endblock %}
+{% block content %}
+<!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Create a book</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="/admin/book/">Books</a></li>
+              <li class="breadcrumb-item active">Create</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-sd-12">
+                        <!-- general form elements -->
+                        <div class="card card-success">
+                        <div class="card-header">
+                            <h3 class="card-title">Book create</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form method="post" action="/admin/book/create" enctype="multipart/form-data" style="border:none;padding:0;" class="form dropzone" id="frmCreateBook">
+                            <div class="card-body">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <span class="required-asterisk">*</span>
+                                {% if form.title.errors %}
+                                    <input type="text" class="form-control is-invalid" id="title" name="title" value="{{ form.title.data }}" required  placeholder="Book title">
+                                    <div class="invalid-feedback">
+                                    {% for error in form.title.errors %}
+                                            <li>{{ error }}</li>
+                                    {% endfor %}
+                                    </div>
+                                {% elif form.title.data != None %}
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ form.title.data }}" required  placeholder="Book title">
+                                {% else %}
+                                    <input type="text" class="form-control" id="title" name="title" required placeholder="Book title">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="book_description">Description</label>
+                                 <textarea id="book_description" name="description">
+                                    {% if form.description.data != None %}
+                                        {{ form.description.data }}
+                                    {% else %}
+                                        <em> Book description </em>
+                                    {% endif %}
+                                </textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <span class="required-asterisk">*</span>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                    </div>
+                                    {% if form.price.errors %}
+                                        <input type="number" class="form-control is-invalid" id="price" name="price" value="{{ form.price.data }}" required  placeholder="Price">
+                                        <div class="invalid-feedback">
+                                        {% for error in form.price.errors %}
+                                                <li>{{ error }}</li>
+                                        {% endfor %}
+                                        </div>
+                                    {% elif form.price.data != None %}
+                                        <input type="number" class="form-control" id="price" name="price" value="{{ form.price.data }}" required  placeholder="Price">
+                                    {% else %}
+                                        <input type="number" class="form-control" id="price" name="price" required placeholder="Price">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="isbn">ISBN</label>
+                                <span class="required-asterisk">*</span>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-solid fa-book"></i></span>
+                                    </div>
+                                    {% if form.isbn.errors %}
+                                    <input type="text" class="form-control is-invalid" id="isbn" name="isbn" value="{{ form.isbn.data }}" required  placeholder="ISBN">
+                                    <div class="invalid-feedback">
+                                    {% for error in form.isbn.errors %}
+                                            <li>{{ error }}</li>
+                                    {% endfor %}
+                                    </div>
+                                    {% elif form.isbn.data != None %}
+                                        <input type="text" class="form-control" id="isbn" name="isbn" value="{{ form.isbn.data }}" required  placeholder="ISBN">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="isbn" name="isbn" required placeholder="ISBN">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="author">Author</label>
+                                <span class="required-asterisk">*</span>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    {% if form.author.errors %}
+                                    <input type="text" class="form-control is-invalid" id="author" name="author" value="{{ form.author.data }}" required  placeholder="Author">
+                                    <div class="invalid-feedback">
+                                    {% for error in form.author.errors %}
+                                            <li>{{ error }}</li>
+                                    {% endfor %}
+                                    </div>
+                                    {% elif form.author.data != None %}
+                                        <input type="text" class="form-control" id="author" name="author" value="{{ form.author.data }}" required  placeholder="Author">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="author" name="author" required placeholder="Author">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="publisher">Publisher</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-address-book"></i></span>
+                                    </div>
+                                    {% if form.publisher.data != None %}
+                                    <input type="text" class="form-control" id="publisher" name="publisher" value="{{ form.publisher.data }}"  placeholder="Publisher">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="publisher" name="publisher" placeholder="Publisher">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="publish_date">Publish Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                    </div>
+                                    {% if publish_date != None %}
+                                        <input type="text" class="form-control datetime-picker" id="publish_date" name="publish_date" value="{{ publish_date }}"  placeholder="Publish Date">
+                                    {% else %}
+                                        <input type="text" class="form-control datetime-picker" id="publish_date" name="publish_date" placeholder="Publish Date">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pages">Total Pages</label>
+                                <span class="required-asterisk">*</span>
+                                {% if form.pages.errors %}
+                                    <input type="number" class="form-control is-invalid" id="pages" name="pages" value="{{ form.pages.data }}"  placeholder="Pages">
+                                    <div class="invalid-feedback">
+                                    {% for error in form.pages.errors %}
+                                            <li>{{ error }}</li>
+                                    {% endfor %}
+                                    </div>
+                                {% elif form.pages.data != None %}
+                                    <input type="number" class="form-control" id="pages" name="pages" value="{{ form.pages.data }}"  placeholder="Pages">
+                                {% else %}
+                                    <input type="number" class="form-control" id="pages" name="pages" placeholder="Pages">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="dimensions">Dimensions</label>
+                                {% if form.dimensions.data != None %}
+                                    <input type="text" class="form-control" id="dimensions" name="dimensions" value="{{ form.dimensions.data }}"  placeholder="Dimensions">
+                                {% else %}
+                                    <input type="text" class="form-control" id="dimensions" name="dimensions" placeholder="Dimensions">
+                                {% endif %}
+                            </div>
+                             <div class="form-group">
+                                <label for="language">Language</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-language"></i></span>
+                                    </div>
+                                    {% if form.language.data != None %}
+                                        <input type="text" class="form-control" id="language" name="language" value="{{ form.language.data }}"  placeholder="Language">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="language" name="language" placeholder="Language">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dimensions">Thumbnail</label>
+                            </div>
+
+                            </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Create</button>
+                                <input type="hidden" id="isFileAdded" value="false" />
+                            </div>
+                        </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+            </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block script %}
+     <script src="{{ url_for('static', filename= '/admin/dist/js/pages/book.js')}} "></script>
+{% endblock %}

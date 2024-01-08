@@ -1,0 +1,16 @@
+.required-asterisk {
+    font-weight: bold;
+    color: red;
+    display: inline;
+}
+input.error {
+    border: 1px solid red;
+}
+label.error {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+    font-weight: normal !important;
+}

@@ -1,0 +1,210 @@
+{% extends "admin/admin_layout.html" %} 
+{% block title %} Book Edit {% endblock %}
+{% block content %}
+<!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Edit a book</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="/admin/book/">Books</a></li>
+              <li class="breadcrumb-item active">Edit</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-sd-12">
+                        <!-- general form elements -->
+                        <div class="card card-success">
+                        <div class="card-header">
+                            <h3 class="card-title" style="font-weight:bold;">{{book.title}}</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form method="post" action="/admin/book/edit/{{ book.id }}" enctype="multipart/form-data" style="border:none;padding:0;" class="form dropzone" id="frmEditBook">
+                            <div class="card-body">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <span class="required-asterisk">*</span>
+                                {% if book.title != None %}
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ book.title }}" required  placeholder="Book title">
+                                {% else %}
+                                    <input type="text" class="form-control" id="title" name="title" required placeholder="Book title">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="book_description">Description</label>
+                                 <textarea id="book_description" name="description">
+                                    {% if book.description != None %}
+                                        {{ book.description }}
+                                    {% else %}
+                                        <em> Book description </em>
+                                    {% endif %}
+                                </textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <span class="required-asterisk">*</span>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                    </div>
+                                    {% if book.price != None %}
+                                        <input type="number" class="form-control" id="price" name="price" value="{{ book.price }}" required  placeholder="Price">
+                                    {% else %}
+                                        <input type="number" class="form-control" id="price" name="price" required placeholder="Price">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="isbn">ISBN</label>
+                                <span class="required-asterisk">*</span>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-solid fa-book"></i></span>
+                                    </div>
+                                    {% if book.isbn != None %}
+                                        <input type="text" class="form-control" id="isbn" name="isbn" value="{{ book.isbn }}" required  placeholder="ISBN">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="isbn" name="isbn" required placeholder="ISBN">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="author">Author</label>
+                                <span class="required-asterisk">*</span>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    {% if book.author != None %}
+                                        <input type="text" class="form-control" id="author" name="author" value="{{ book.author }}" required  placeholder="Author">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="author" name="author" required placeholder="Author">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="publisher">Publisher</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-address-book"></i></span>
+                                    </div>
+                                    {% if book.publisher != None %}
+                                    <input type="text" class="form-control" id="publisher" name="publisher" value="{{ book.publisher }}"  placeholder="Publisher">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="publisher" name="publisher" placeholder="Publisher">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="publish_date">Publish Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                    </div>
+                                    {% if book.publish_date != None %}
+                                        <input type="text" class="form-control datetime-picker" id="publish_date" name="publish_date" value="{{ book.publish_date.strftime('%m/%d/%Y') }}"  placeholder="Publish Date">
+                                    {% else %}
+                                        <input type="text" class="form-control datetime-picker" id="publish_date" name="publish_date" placeholder="Publish Date">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pages">Total Pages</label>
+                                <span class="required-asterisk">*</span>
+                                {% if book.pages != None %}
+                                    <input type="number" class="form-control" id="pages" name="pages" value="{{ book.pages }}"  placeholder="Pages">
+                                {% else %}
+                                    <input type="number" class="form-control" id="pages" name="pages" placeholder="Pages">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="dimensions">Dimensions</label>
+                                {% if book.dimensions != None %}
+                                    <input type="text" class="form-control" id="dimensions" name="dimensions" value="{{ book.dimensions }}"  placeholder="Dimensions">
+                                {% else %}
+                                    <input type="text" class="form-control" id="dimensions" name="dimensions" placeholder="Dimensions">
+                                {% endif %}
+                            </div>
+                             <div class="form-group">
+                                <label for="language">Language</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-language"></i></span>
+                                    </div>
+                                    {% if book.language != None %}
+                                        <input type="text" class="form-control" id="language" name="language" value="{{ book.language }}"  placeholder="Language">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="language" name="language" placeholder="Language">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dimensions">Thumbnail</label>
+                                {% if book.thumbnail != None and book.thumbnail != '' %}
+                                    <img src="data:image/png;base64, {{ book.thumbnail }}" alt="{{ book.title }}" style="height: 60px; width:60px;" />
+                                {% endif %}
+                            </div>
+                            </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <input type="hidden" id="isFileAdded" value="false" />
+                                <input type="hidden" id="book_id" value="{{ book.id }}" />
+                                <button type="submit" class="btn btn-success"><i class="fas fa-edit"></i> Update</button>
+                                <span id="error_message" class="required-asterisk"></span>
+                                {% if book.is_published == False %}
+                                     <button type="button" data-id="publish" class="btn btn-warning publish-unpublish"><i class="fas fa-upload"></i> Publish</button>
+                                {% else %}
+                                    <button type="button" data-id="unpublish" class="btn btn-danger publish-unpublish"> <i class="fas fa-download"></i> UnPublish</button>
+                                {% endif %}
+                                {% if book.updated_at != None %}
+                                <em style="float:right;">| Last updated: <span style="font-weight:bold;color:green;">{{ book.updated_at.strftime("%d/%m/%Y %H:%M:%S") }} </span></em>
+                                {% endif %}
+                                 <em style="float:right;">Created at: <span style="font-weight:bold;color:green;">{{ book.created_at.strftime("%d/%m/%Y %H:%M:%S") }}</span> </em>
+                                 <em style="float:right;">Is published: <span style="font-weight:bold;color:green;">{{ book.is_published }} </span> | </em>
+                            </div>
+                        </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+            </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block script %}
+     <script src="{{ url_for('static', filename= '/admin/dist/js/pages/book.js')}} "></script>
+     <script>
+        $(document).ready(function() {
+            'use strict'
+            $("button.publish-unpublish").click(function(){
+                if($("#frmEditBook").valid()){
+                    var action = $(this).data('id');
+                    var bookId = $("#book_id").val();
+                    $.ajax({
+                            type: 'PUT',
+                            url: '/admin/book/publish/' + bookId + '/' + action,
+                            contentType: 'application/json',
+                            data: null,
+                        }).done(function (response) {
+                            window.location.href = '/admin/book/edit/' + bookId;
+                        }).fail(function (msg) {
+                            $("#error_message").text('Failed to publish/unpublish a book');
+                        });
+                }
+            });
+        })
+     </script>
+{% endblock %}
