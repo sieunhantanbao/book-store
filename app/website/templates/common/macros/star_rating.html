@@ -1,0 +1,30 @@
+{% macro rating(subject_id, rating_value, average_rating_value) -%}
+{% set rating_value = 0 if rating_value == None else rating_value %}
+<div class="rating" data-vote="{{rating_value}}" data-id="{{subject_id}}">
+      {% for i in range(1,6) %}
+        <div class="star">
+          {% if rating_value < i %}
+            <span class="full" data-value="{{i}}"></span>
+          {% else %}
+            <span class="full star-colour" data-value="{{i}}"></span>
+          {% endif %}
+
+          {% if rating_value < (i-0.5) %}
+           <span class="half" data-value="{{i-0.5}}"></span>
+          {% else %}
+            <span class="half star-colour" data-value="{{i-0.5}}"></span>
+          {% endif %}
+          <span class="selected"></span>
+        </div>
+      {% endfor %}
+      <div class="score">
+        {% if average_rating_value and average_rating_value != None %}
+          <span class="score-rating js-score">{{average_rating_value}}</span>
+           <span style="font-size:12px; color: grey; padding-left:10px;top:2;">(average)</span>
+        {% else %}
+           <span class="score-rating js-score">N/A</span>
+           <span style="font-size:12px; color: grey; padding-left:10px;top:2;">(average)</span>
+        {% endif %}
+      </div>
+</div>
+{%- endmacro %}

@@ -1,69 +1,22 @@
 (function () {
     'use strict'
-    var optSimple = {
-      format: 'mm-dd-yyyy',
-      todayHighlight: true,
-      orientation: 'bottom right',
-      autoclose: true,
-      container: '#sandbox'
-    };
-  
-    $('.datetime-picker').datepicker(optSimple);
 
-    $('#book_description').summernote(
-        {
-        height: 150,
-        focus: true
-      });
-
-    $("#frmCreateBook").validate({
+    $("#frmCreateCategory").validate({
       rules: {
-        title: {
+        name: {
             required: true,
         },
         short_description: {
             required: true,
         },
-        category_id: {
-            required: true,
-        },
-        price: {
-            required: true,
-            min: 0,
-            number: true,
-        },
-        isbn: {
-            required: true
-        },
-        author: {
-            required: true
-        },
-        pages: {
-            required: true,
-            min: 0,
-            number: true,
-        }
       },
       messages: {
-        title: "Book title is required",
+        name: "Category name is required",
         short_description: "Short description is required",
-        category_id: "Category is required",
-        price: {
-            required: "Price is required",
-            min: "Price must be greater or equal 0",
-            number: "Price should be a number",
-        },
-        isbn: "ISBN is required",
-        author: "Author is required",
-        pages: {
-            required: "Total pages is required",
-            min: "Total pages must be greater or equal 0",
-            number: "Total pages should be a number",
-        }
       }
     });
 
-    Dropzone.options.frmCreateBook = {
+    Dropzone.options.frmCreateCategory = {
         autoProcessQueue: false,
         uploadMultiple: true,
         maxFilesize: 2, // MB
@@ -76,7 +29,7 @@
             var myDropzone = this;
             // First change the button to actually tell Dropzone to process the queue.
             $(":submit").click(function(e){
-                 if($("#frmCreateBook").valid()){
+                 if($("#frmCreateCategory").valid()){
                     if ($("#isFileAdded").val() == "true"){
                         e.preventDefault();
                         e.stopPropagation();
@@ -98,7 +51,7 @@
             this.on("successmultiple", function(files, response) {
             // Gets triggered when the files have successfully been sent.
             // Redirect user or notify of success.
-               window.location.href = '/admin/book';
+               window.location.href = '/admin/category';
             });
             this.on("errormultiple", function(files, response) {
             // Gets triggered when there was an error sending the files.
@@ -107,54 +60,22 @@
         }
     };
 
-    $("#frmEditBook").validate({
+    $("#frmEditCategory").validate({
       rules: {
-        title: {
+        name: {
             required: true,
         },
         short_description: {
-            required: true,
+        required: true,
         },
-        category_id: {
-            required: true,
-        },
-        price: {
-            required: true,
-            min: 0,
-            number: true,
-        },
-        isbn: {
-            required: true
-        },
-        author: {
-            required: true
-        },
-        pages: {
-            required: true,
-            min: 0,
-            number: true,
-        }
       },
       messages: {
-        title: "Book title is required",
+        name: "Category name is required",
         short_description: "Short description is required",
-        category_id: "Category is required",
-        price: {
-            required: "Price is required",
-            min: "Price must be greater or equal 0",
-            number: "Price should be a number",
-        },
-        isbn: "ISBN is required",
-        author: "Author is required",
-        pages: {
-            required: "Total pages is required",
-            min: "Total pages must be greater or equal 0",
-            number: "Total pages should be a number",
-        }
       }
     });
 
-    Dropzone.options.frmEditBook = {
+    Dropzone.options.frmEditCategory = {
       autoProcessQueue: false,
       uploadMultiple: true,
       maxFilesize: 2, // MB
@@ -167,7 +88,7 @@
           var myDropzone = this;
           // First change the button to actually tell Dropzone to process the queue.
           $(":submit").click(function(e){
-               if($("#frmEditBook").valid()){
+               if($("#frmEditCategory").valid()){
                 if ($("#isFileAdded").val() == "true"){
                     e.preventDefault();
                     e.stopPropagation();
@@ -189,7 +110,7 @@
           this.on("successmultiple", function(files, response) {
           // Gets triggered when the files have successfully been sent.
           // Redirect user or notify of success.
-              window.location.href = '/admin/book';
+              window.location.href = '/admin/category';
           });
           this.on("errormultiple", function(files, response) {
           // Gets triggered when there was an error sending the files.

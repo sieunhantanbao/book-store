@@ -1,0 +1,10 @@
+{% extends "common/layout.html" %} 
+{% block content %} 
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Book detail</h1>
+    </div>
+        {{ book.title }}
+        <br/>
+        {{ book.slug }}
+  {% endblock %}
+    

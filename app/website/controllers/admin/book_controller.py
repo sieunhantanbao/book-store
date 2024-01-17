@@ -27,11 +27,12 @@ def create():
     if current_user.is_authenticated:
         form = BookCreateForm(request.form)
         publish_date = None
+        categories = _book_service.get_all_categories_for_ddl()
         if request.method == "POST" and form.validate():
             publish_date = request.form.get('publish_date')
             _book_service.create(form, request)
             return redirect(url_for('book_controller.list')) # seem like this does not affect, the redirect is implemented from the JS (book_create.html)
-        return render_template('admin/book_create.html', form=form, publish_date = publish_date, user=current_user)
+        return render_template('admin/book_create.html', form=form, publish_date = publish_date, categories = categories, user=current_user)
     return redirect(url_for('auth.login'))
 
 
@@ -43,17 +44,18 @@ def edit(book_id):
     """
     if current_user.is_authenticated:
         book_to_edit = _book_service.get_by_id(book_id)
+        categories = _book_service.get_all_categories_for_ddl()
         if request.method == "GET":
             if book_to_edit:
                 if book_to_edit.thumbnail != None:
                     book_to_edit.thumbnail =  book_to_edit.thumbnail.decode("utf-8")
-                return render_template('admin/book_edit.html', book = book_to_edit, user = current_user)
+                return render_template('admin/book_edit.html', book = book_to_edit, categories=categories, user = current_user)
         elif request.method == "POST":
             if book_to_edit:
                 _book_service.edit(book_to_edit, request)
             else:
                 # Error - no book found
-                return render_template('admin/book_edit.html', book = book_to_edit, user = current_user)
+                return render_template('admin/book_edit.html', book = book_to_edit, categories=categories, user = current_user)
         return redirect(url_for('book_controller.list'))
     return redirect(url_for('auth.login'))
 

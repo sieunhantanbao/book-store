@@ -1,7 +1,8 @@
-from wtforms import Form, StringField, validators, DecimalField, IntegerField
+from wtforms import Form, StringField, validators, DecimalField, IntegerField, BooleanField
 
 class BookCreateForm(Form):
     title = StringField('Title', [validators.DataRequired()])
+    short_description = StringField('Short Description', [validators.DataRequired()])
     description = StringField('Description', [])
     price = DecimalField('Price', [validators.NumberRange(min=0), validators.DataRequired()])
     isbn = StringField('ISBN', [validators.DataRequired()])
@@ -11,3 +12,5 @@ class BookCreateForm(Form):
     dimensions = StringField('Dimensions', [])
     language = StringField('Language', [])
     thumbnail = StringField('Thumbnail', [])
+    is_featured = BooleanField('Is featured', [])
+    category_id = IntegerField('Category', [validators.NumberRange(min=0)])

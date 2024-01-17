@@ -49,6 +49,61 @@
                                 {% endif %}
                             </div>
                             <div class="form-group">
+                                <label for="short_description">Short Description</label>
+                                <span class="required-asterisk">*</span>
+                                {% if form.short_description.errors %}
+                                    <input type="text" class="form-control is-invalid" id="short_description" name="short_description" value="{{ form.short_description.data }}" required  placeholder="Short description">
+                                    <div class="invalid-feedback">
+                                    {% for error in form.short_description.errors %}
+                                            <li>{{ error }}</li>
+                                    {% endfor %}
+                                    </div>
+                                {% elif form.short_description.data != None %}
+                                    <input type="text" class="form-control" id="short_description" name="short_description" value="{{ form.short_description.data }}" required  placeholder="Short description">
+                                {% else %}
+                                    <input type="text" class="form-control" id="short_description" name="short_description" required placeholder="Short description">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="category_id">Category</label>
+                                <span class="required-asterisk">*</span>
+                                {% if form.category_id.errors %}
+                                    <select name="category_id" id="category_id" class="form-select form-control is-invalid required">
+                                        <option value="">---Select Category---</option>
+                                        {% for category in categories %}
+                                            {% if form.category_id.data != category.id %}
+                                                <option value="{{category.id}}">{{category.name}}</option>
+                                            {% else %}
+                                                <option value="{{category.id}}" selected>{{category.name}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <div class="invalid-feedback">
+                                    {% for error in form.category_id.errors %}
+                                            <li>{{ error }}</li>
+                                    {% endfor %}
+                                    </div>
+                                {% elif form.category_id.data != None %}
+                                    <select name="category_id" id="category_id" class="form-select form-control required">
+                                        <option value="">---Select Category---</option>
+                                        {% for category in categories %}
+                                            {% if form.category_id.data != category.id %}
+                                                <option value="{{category.id}}">{{category.name}}</option>
+                                            {% else %}
+                                                <option value="{{category.id}}" selected>{{category.name}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                {% else %}
+                                    <select name="category_id" id="category_id" class="form-select form-control required">
+                                        <option selected value="">---Select Category---</option>
+                                        {% for category in categories %}
+                                            <option value="{{category.id}}">{{category.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
                                 <label for="book_description">Description</label>
                                  <textarea id="book_description" name="description">
                                     {% if form.description.data != None %}
@@ -184,7 +239,11 @@
                                     {% endif %}
                                 </div>
                             </div>
-
+                            <div class="form-group">
+                            <label for="language">Featured book?</label>
+                                <input name="is_featured" id="is_featured"  type="checkbox" data-size="sm" data-onstyle="success"
+                                data-toggle="toggle" data-onlabel="<i class='fas fa-check'></i> Yes" data-offlabel="<i class='fas fa-ban'></i> No">
+                            </div>
                             <div class="form-group">
                                 <label for="dimensions">Thumbnail</label>
                             </div>

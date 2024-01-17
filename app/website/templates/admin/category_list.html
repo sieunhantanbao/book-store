@@ -1,17 +1,17 @@
 {% extends "admin/admin_layout.html" %} 
-{% block title %} Book List {% endblock %}
+{% block title %} Category List {% endblock %}
 {% block content %}
 <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Books Management</h1>
+            <h1 class="m-0">Categories Management</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item"><a href="/admin/book/">Books</a></li>
+              <li class="breadcrumb-item"><a href="/admin/category/">Categories</a></li>
               <li class="breadcrumb-item active">List</li>
             </ol>
           </div><!-- /.col -->
@@ -25,46 +25,28 @@
             <div class="col-md-12 col-sd-12">
                 <div class="card">
                     <div class="card-header">
-                       <a href="/admin/book/create" class="btn btn-success"><i class="fas fa-plus"></i> Add Book</a>
+                       <a href="/admin/category/create" class="btn btn-success"><i class="fas fa-plus"></i> Add Category</a>
                     </div>
                     <div class="card-body">
-                        <table id="tblBook" class="table table-bordered table-hover">
+                        <table id="tblCategory" class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th style="width:40px;">Image</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Author</th>
-                            <th>Price</th>
-                            <th>Is Featured</th>
-                            <th>Is Published</th>
+                            <th style="width:60px;">Image</th>
+                            <th>Name</th>
                         </tr>
                         </thead>
                         <tbody>
-                            {% for book in books %}
+                            {% for category in categories %}
                                 <tr>
                                     <td>
-                                        {% if book.thumbnail != None and book.thumbnail != '' %}
-                                                <img src="data:image/png;base64, {{ book.thumbnail }}" alt="{{ book.title }}" style="height: 60px; width:60px;" />
+                                        {% if category.thumbnail != None and category.thumbnail != '' %}
+                                                <img src="data:image/png;base64, {{ category.thumbnail }}" alt="{{ category.name }}" style="height: 60px; width:60px;" />
                                         {% else %}
-                                            <img src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{ book.title }}" style="height: 60px; width:60px;" />
+                                            <img src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{ category.name }}" style="height: 60px; width:60px;" />
                                         {% endif %}
                                     </td>
                                     <td> 
-                                        <a href="/admin/book/edit/{{ book.id }}">{{ book.title }} </a>
-                                    </td>
-                                     <td> 
-                                        <a href="/admin/category/edit/{{ book.category_id }}">{{ book.category.name }} </a>
-                                    </td>
-                                    <td> {{ book.author }}</td>
-                                    <td> <strong>{{ "${:,}".format(book.price) }}</strong></td>
-                                    <td> {{ book.is_featured }}</td>
-                                    <td> 
-                                        {% if book.is_published == True %}
-                                            <i class="fas fa-upload text-success"> &nbsp;Published</i> 
-                                        {% else %}
-                                            <i class="fas fa-download text-danger"> &nbsp;Draft</i>
-                                        {% endif %}
+                                        <a href="/admin/category/edit/{{ category.id }}">{{ category.name }} </a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -72,12 +54,7 @@
                         <tfoot>
                         <tr>
                             <th>Image</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Author</th>
-                            <th>Price</th>
-                            <th>Is Featured</th>
-                            <th>Is Published</th>
+                            <th>Name</th>
                         </tr>
                         </tfoot>
                         </table>
@@ -94,7 +71,7 @@
 {% block script %}
     <script>
         $(function () {
-            $('#tblBook').DataTable({
+            $('#tblCategory').DataTable({
             "paging": true,
             "lengthChange": false,
             "searching": true,

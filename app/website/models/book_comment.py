@@ -1,4 +1,5 @@
 from ... import db_context
+from .user import User
 
 class BookComment(db_context.Model):
     id = db_context.Column(db_context.Integer, primary_key=True)

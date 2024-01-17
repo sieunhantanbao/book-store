@@ -1,0 +1,116 @@
+{% extends "common/layout.html" %} 
+
+{% block style %} 
+<style>
+    .card-header {
+      font-size: 20px;
+      background: linear-gradient(90deg, rgba(255, 255, 0, 1) 0%, rgba(0, 188, 212, 1) 50%, rgba(238, 130, 238, 1) 100%);
+    }
+    /* Carousel styling */
+    .carousel-inner,
+    .carousel-item,
+    .carousel-item.active {
+      height: 60vh;
+    }
+     .my-carousel-caption {
+      background-color: rgba(0, 0, 0, 0.2);
+      width:100%;
+      height:100%;
+      position:static;
+    }
+    .carousel-title {
+      font-size: 30px;
+      color: white;
+      font-weight: bold;
+      margin-top: 200px;
+    }
+    .carousel-description {
+      color: white;
+      font-weight: bold;
+    }
+    .my-carousel {
+      border:1px solid grey; border-radius: 4px;
+    }
+  </style>
+
+  {% for featured_book in featured_books %}
+    <style>
+      .carousel-item:nth-child({{loop.index}}) {
+      background-image: url('data:image/gif;base64, {{featured_book.thumbnail}}');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+      }
+    </style>
+  {% endfor %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="mt-0 mb-5">
+    <div class="d-flex justify-content-center row">
+      <div class="col-md-12">
+          <div class="card">
+            <div class="card-header text-black fw-bold"><i class="fas fa-heart fa-2xl"></i> MY WISHLISTS</div>
+            <div class="card-body">
+                <div class="row">
+                    {% for book in books %}
+                    <div class="col-md-6">
+                        <div class="row p-2 bg-white border rounded mt-2 position-relative" style="margin-right:1px;height:200px;">
+                          {% if book.is_featured %}
+                            <div class="ribbon-wrapper ribbon-lg">
+                              <div class="ribbon text-white" style="background-color:red;">
+                                Featured
+                              </div>
+                            </div>
+                          {% endif %}
+                          <div class="col-md-3 mt-1">
+                            {% if book.thumbnail != None and book.thumbnail != '' %}
+                              <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
+                            {% else %}
+                              <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
+                            {% endif %}
+                          </div>
+                          <div class="col-md-6 mt-1">
+                              <h5 class="text-truncate">{{book.title}}</h5>
+                              <div class="d-flex flex-row">
+                                  <div class="ratings mr-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                  </div>
+                              </div>
+                              <div class="mt-1 mb-1">
+                                <i class="fas fa-user text-success"></i> <span> {{book.author}}</span>
+                                <i class="fas fa-book text-success"></i> </span><span> {{book.isbn}}</span>
+                                <i class="fas fa-newspaper text-success"></i> <span> {{book.publisher}}<br></span>
+                              </div>
+                              <div class="mt-1 mb-1">
+                                <span>{{book.dimession}}</span>
+                                <i class="fas fa-language text-success"></i> <span> {{book.language}}</span>
+                                <i class="fas fa-calendar text-success"></i> <span> {{book.publish_date.strftime('%m/%d/%Y')}}<br></span>
+                              </div>
+                              <p class="text-justify text-truncate para mb-0">{{book.short_description}}<br><br></p>
+                          </div>
+                          <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                              <div class="d-flex flex-row align-items-center">
+                                  <h4 class="mr-1">{{"${:,}".format(book.price)}}</h4>
+                              </div>
+                              <h6 class="text-success">Free shipping</h6>
+                              <div class="d-flex flex-column mt-4">
+                                <a href="/book/detail/{{book.slug}}" class="btn btn-primary btn-sm" type="button">Details</a>
+                                  <button class="btn btn-danger btn-sm mt-2 remove-from-wishlist" data-id="{{book.id}}" type="button">Remove wishlist</button>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div> <!-- Row -->
+            </div> <!-- Card body -->
+          </div> <!-- Card -->
+      </div> <!-- col-md-12 -->
+    </div> <!-- d-flex justify-content-center row -->
+  </div> <!-- mt-5 mb-5 -->
+  {% endblock %}
+
+{% block script %}
+     <script src="{{ url_for('static', filename= 'client/js/pages/wishlist.js') }} "></script>
+{% endblock %}

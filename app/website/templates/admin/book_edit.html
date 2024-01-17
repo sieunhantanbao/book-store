@@ -42,6 +42,37 @@
                                 {% endif %}
                             </div>
                             <div class="form-group">
+                                <label for="short_description">Short Description</label>
+                                <span class="required-asterisk">*</span>
+                                {% if book.short_description != None %}
+                                    <input type="text" class="form-control" id="short_description" name="short_description" value="{{ book.short_description }}" required  placeholder="Short description">
+                                {% else %}
+                                    <input type="text" class="form-control" id="short_description" name="short_description" required placeholder="Short description">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="short_description">Category</label>
+                                <span class="required-asterisk">*</span>
+                                <select name="category_id" id="category_id" class="form-select form-control required">
+                                        <option value="">---Select Category---</option>
+                                        {% for category in categories %}
+                                            {% if book.category_id != category.id %}
+                                                <option value="{{category.id}}">{{category.name}}</option>
+                                            {% else %}
+                                                <option value="{{category.id}}" selected>{{category.name}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="slug">Slug</label>
+                                {% if book.Slug != None %}
+                                    <input type="text" readonly="readonly" class="form-control" id="slug" name="slug" value="{{ book.slug }}"  placeholder="Book Slug">
+                                {% else %}
+                                    <input type="text" readonly="readonly" class="form-control" id="slug" name="slug" placeholder="Book Slug">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
                                 <label for="book_description">Description</label>
                                  <textarea id="book_description" name="description">
                                     {% if book.description != None %}
@@ -149,7 +180,16 @@
                                     {% endif %}
                                 </div>
                             </div>
-
+                            <div class="form-group">
+                            <label for="language">Featured book?</label>
+                                {% if book.is_featured %}
+                                    <input name="is_featured" id="is_featured"  type="checkbox" checked data-size="sm" data-onstyle="success"
+                                data-toggle="toggle" data-onlabel="<i class='fas fa-check'></i> Yes" data-offlabel="<i class='fas fa-ban'></i> No">
+                                {% else %}
+                                    <input name="is_featured" id="is_featured"  type="checkbox" data-size="sm" data-onstyle="success"
+                                data-toggle="toggle" data-onlabel="<i class='fas fa-check'></i> Yes" data-offlabel="<i class='fas fa-ban'></i> No">
+                                {% endif %}
+                            </div>
                             <div class="form-group">
                                 <label for="dimensions">Thumbnail</label>
                                 {% if book.thumbnail != None and book.thumbnail != '' %}

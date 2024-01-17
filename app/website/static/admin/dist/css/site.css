@@ -3,9 +3,10 @@
     color: red;
     display: inline;
 }
-input.error {
+input.error, select.error  {
     border: 1px solid red;
 }
+
 label.error {
     display: block;
     width: 100%;
