@@ -105,17 +105,19 @@
                             </div>
                           {% endif %}
                           <div class="col-md-3 mt-1">
-                            {% if book.thumbnail != None and book.thumbnail != '' %}
-                              <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
-                            {% else %}
-                              <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
-                            {% endif %}
+                            <a href="/book/detail/{{book.slug}}">
+                              {% if book.thumbnail != None and book.thumbnail != '' %}
+                                <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
+                              {% else %}
+                                <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
+                              {% endif %}
+                            </a>
                           </div>
                           <div class="col-md-6 mt-1">
                               <h5 class="text-truncate">{{book.title}}</h5>
                               <div class="d-flex flex-row">
                                   <div class="ratings mr-2">
-                                     {{ star_rating.rating(book.id, book.rating_value, book.average_rating_value) }}
+                                     {{ star_rating.rating(book.id, book.total_ratings, book.average_rating_value) }}
                                   </div>
                               </div>
                               <div class="mt-1 mb-1">
@@ -136,7 +138,8 @@
                               </div>
                               <h6 class="text-success">Free shipping</h6>
                               <div class="d-flex flex-column mt-4">
-                                <a href="/book/detail/{{book.slug}}" class="btn btn-primary btn-sm" type="button">Details</a>
+                                <br/>
+                                <a class="btn btn-primary btn-sm" href="/book/detail/{{book.slug}}">Details</a>
                                 {% if not book.id in wishlists %}
                                   <button class="btn btn-outline-success btn-sm mt-2 add-to-wishlist" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
                                 {% else %}
@@ -153,9 +156,12 @@
       </div> <!-- col-md-12 -->
     </div> <!-- d-flex justify-content-center row -->
   </div> <!-- mt-5 mb-5 -->
+  {{ star_rating.rating_detail_popover() }}
+  
   {% endblock %}
 
 {% block script %}
      <script src="{{ url_for('static', filename= '/client/js/pages/dashboard.js')}} "></script>
+     <script src="{{ url_for('static', filename= '/client/js/pages/wishlist.js')}} "></script>
      <script src="{{ url_for('static', filename= '/client/js/pages/star_rating.js')}} "></script>
 {% endblock %}

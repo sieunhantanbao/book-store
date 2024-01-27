@@ -16,3 +16,4 @@ class User(db_context.Model, UserMixin):
     is_active = db_context.Column(db_context.Boolean, default = True)
     created_at = db_context.Column(db_context.DateTime(timezone = True))
     updated_at = db_context.Column(db_context.DateTime(timezone = True), default = None)
+    ratings = db_context.relationship('Rating', backref='user', lazy=True)

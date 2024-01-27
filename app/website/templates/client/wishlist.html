@@ -1,49 +1,8 @@
 {% extends "common/layout.html" %} 
+{% import "common/macros/star_rating.html" as star_rating %}
 
 {% block style %} 
-<style>
-    .card-header {
-      font-size: 20px;
-      background: linear-gradient(90deg, rgba(255, 255, 0, 1) 0%, rgba(0, 188, 212, 1) 50%, rgba(238, 130, 238, 1) 100%);
-    }
-    /* Carousel styling */
-    .carousel-inner,
-    .carousel-item,
-    .carousel-item.active {
-      height: 60vh;
-    }
-     .my-carousel-caption {
-      background-color: rgba(0, 0, 0, 0.2);
-      width:100%;
-      height:100%;
-      position:static;
-    }
-    .carousel-title {
-      font-size: 30px;
-      color: white;
-      font-weight: bold;
-      margin-top: 200px;
-    }
-    .carousel-description {
-      color: white;
-      font-weight: bold;
-    }
-    .my-carousel {
-      border:1px solid grey; border-radius: 4px;
-    }
-  </style>
-
-  {% for featured_book in featured_books %}
-    <style>
-      .carousel-item:nth-child({{loop.index}}) {
-      background-image: url('data:image/gif;base64, {{featured_book.thumbnail}}');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-      }
-    </style>
-  {% endfor %}
-
+<link href="{{ url_for('static', filename = '/client/css/pages/star_rating.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -75,7 +34,7 @@
                               <h5 class="text-truncate">{{book.title}}</h5>
                               <div class="d-flex flex-row">
                                   <div class="ratings mr-2">
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                      {{ star_rating.rating(book.id, book.total_ratings, book.average_rating_value) }}
                                   </div>
                               </div>
                               <div class="mt-1 mb-1">
@@ -109,8 +68,10 @@
       </div> <!-- col-md-12 -->
     </div> <!-- d-flex justify-content-center row -->
   </div> <!-- mt-5 mb-5 -->
+    {{ star_rating.rating_detail_popover() }}
   {% endblock %}
 
 {% block script %}
-     <script src="{{ url_for('static', filename= 'client/js/pages/wishlist.js') }} "></script>
+    <script src="{{ url_for('static', filename= 'client/js/pages/wishlist.js') }} "></script>
+    <script src="{{ url_for('static', filename= '/client/js/pages/star_rating.js')}} "></script>
 {% endblock %}

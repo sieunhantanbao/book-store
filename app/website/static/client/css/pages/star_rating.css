@@ -108,3 +108,10 @@
     position: relative;
     left: 10px;
   }
+
+.score-rating-average-text {
+    font-size:12px;
+    color: grey;
+    padding-left:10px;
+    top:2;
+}

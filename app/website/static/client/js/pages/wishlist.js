@@ -2,10 +2,30 @@
   'use strict'
 
   $(document).ready(function(){
+    
+    $(".add-to-wishlist").on('click', function(){
+      var self = $(this);
+      var bookId = self.data('id');
+      $.ajax({
+        type: 'POST',
+        url: '/book/add-wishlist',
+        contentType: 'application/json',
+        data: JSON.stringify({ "book_id": bookId }),
+      }).done(function (response) {
+          if(response.success){
+            self.removeClass('btn-outline-success').addClass('disabled btn-danger');
+          }else{
+            window.location.href = '/auth/login';
+          }
+      }).fail(function (msg) {
+          console.error(msg);
+          window.location.href = '/auth/login';
+        });
+    });
+
     $(".remove-from-wishlist").on('click', function(){
         var self = $(this);
         var bookId = self.data('id');
-        debugger;
         $.ajax({
           type: 'POST',
           url: '/book/remove-wishlist',
@@ -14,9 +34,12 @@
         }).done(function (response) {
             if(response.success){
               self.parent().parent().parent().parent().remove();
+            }else{
+              window.location.href = '/auth/login';
             }
         }).fail(function (msg) {
-            console.table(msg);
+            console.error(msg);
+            window.location.href = '/auth/login';
         });
     });
   });

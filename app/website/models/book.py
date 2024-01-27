@@ -1,6 +1,5 @@
 from ... import db_context
 from .book_category import Category
-from .book_comment import BookComment
 
 class Book(db_context.Model):
     id = db_context.Column(db_context.Integer, primary_key=True)
@@ -22,5 +21,5 @@ class Book(db_context.Model):
     is_published = db_context.Column(db_context.Boolean, default = False)
     created_at = db_context.Column(db_context.DateTime(timezone = True))
     updated_at = db_context.Column(db_context.DateTime(timezone = True), default = None)
-    category_id = db_context.Column(db_context.Integer, db_context.ForeignKey('category.id'))
-    comments = db_context.relationship('BookComment', backref='book')
+    category_id = db_context.Column(db_context.Integer, db_context.ForeignKey('category.id'), nullable=False)
+    ratings = db_context.relationship('Rating', backref='book', lazy=True)
