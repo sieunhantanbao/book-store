@@ -1,6 +1,6 @@
 from flask import Blueprint, abort, render_template, request, make_response, jsonify
 from flask_login import login_required, current_user
-from ...services import book_client_service as _book_service, wishlist_service as _wishlist_service, rating_service as _rating_service
+from ...services import book_client_service as _book_service, rating_client_service as _rating_service, wishlist_service as _wishlist_service
 book = Blueprint('book', __name__)
 
 @book.route('/detail/<id_or_slug>')
@@ -11,9 +11,6 @@ def book_detail(id_or_slug):
     book = _book_service.get_by_id(id_or_slug)
     if not book:
         abort(404)
-    # Book thumbnail
-    if book.thumbnail != None:
-        book.thumbnail =  book.thumbnail.decode("utf-8")
     
     # Book average rating
     average_rating = _rating_service.get_average_rating_value_by_book(book.id)
@@ -75,9 +72,6 @@ def my_book_wishlists():
     
     books = [result.Book for result in results]
     for book in books:
-        if book.thumbnail != None:
-            book.thumbnail =  book.thumbnail.decode("utf-8")
-        
         average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
         if average_rating:
             book.average_rating_value = average_rating[0].average_rating_value

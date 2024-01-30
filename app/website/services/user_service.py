@@ -11,9 +11,6 @@ def get_all():
     Get all users from database
     """
     users = User.query.all()
-    for user in users:
-        if user.photo != None:
-            user.photo =  user.photo.decode("utf-8")
     return users
 
 def get_by_email(email:str):

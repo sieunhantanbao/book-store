@@ -82,5 +82,5 @@ def change_profile_photo():
         user = _user_service.get_by_email(current_user.email)
         _user_service.update_profile_photo(user, request)
         # Return to client
-        return make_response(jsonify(user_photo=user.photo.decode("utf-8")), 200)
+        return make_response(jsonify(user_photo=user.photo), 200)
     return make_response(jsonify(message='Unauthorized'), 401)

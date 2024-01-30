@@ -6,4 +6,5 @@ flask-login
 Flask-SQLAlchemy
 Flask           
 pipenv
-python-slugify          
+python-slugify
+pyodbc          
