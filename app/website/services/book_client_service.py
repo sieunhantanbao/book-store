@@ -15,9 +15,6 @@ def get_all():
     Get all books from database
     """
     books = Book.query.filter_by(is_published=True).all()
-    # for book in books:
-    #         if book.thumbnail != None:
-    #             book.thumbnail =  book.thumbnail.decode("utf-8")
     return books
 
 def get_all_categories():
@@ -25,9 +22,6 @@ def get_all_categories():
     Get all categories
     """
     categories = Category.query.all()
-    # for category in categories:
-    #         if category.thumbnail != None and category.thumbnail != '':
-    #             category.thumbnail =  category.thumbnail.decode("utf-8")
     return categories
 
 def get_book_wishlists(user_id):

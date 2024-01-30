@@ -47,8 +47,6 @@ def edit(book_id):
         categories = _book_service.get_all_categories_for_ddl()
         if request.method == "GET":
             if book_to_edit:
-                # if book_to_edit.thumbnail != None:
-                #     book_to_edit.thumbnail =  book_to_edit.thumbnail.decode("utf-8")
                 return render_template('admin/book_edit.html', book = book_to_edit, categories=categories, user = current_user)
         elif request.method == "POST":
             if book_to_edit:
