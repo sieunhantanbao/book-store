@@ -42,8 +42,8 @@ def edit_category(cat_id):
         category_to_edit = _book_service.get_category_by_id(cat_id)
         if request.method == "GET":
             if category_to_edit:
-                if category_to_edit.thumbnail != None:
-                    category_to_edit.thumbnail =  category_to_edit.thumbnail.decode("utf-8")
+                # if category_to_edit.thumbnail != None:
+                #     category_to_edit.thumbnail =  category_to_edit.thumbnail.decode("utf-8")
                 return render_template('admin/category_edit.html', category = category_to_edit, user = current_user)
         elif request.method == "POST":
             if category_to_edit:

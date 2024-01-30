@@ -18,6 +18,7 @@ def create_app() -> Flask:
     app = Flask(__name__, template_folder='website/templates', static_folder='website/static')
     app.config['SECRET_KEY'] = os.environ['APP_SECRET_KEY']
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
+    
     db_context.init_app(app)
     migrate = Migrate(app, db_context)
 
@@ -36,6 +37,7 @@ def __register_blueprint(app:Flask):
     from .website.controllers.admin.book_controller import admin_book
     from .website.controllers.admin.user_controller import admin_user
     from .website.controllers.admin.dashboard_controller import admin_dashboard
+    from .website.controllers.admin.rating_review_controller import admin_rating_review
 
     app.register_blueprint(dashboard, url_prefix = '/')
     app.register_blueprint(book, url_prefix = '/book/')
@@ -44,6 +46,7 @@ def __register_blueprint(app:Flask):
     app.register_blueprint(admin_category, url_prefix='/admin/category/')
     app.register_blueprint(admin_book, url_prefix = '/admin/book/' )
     app.register_blueprint(admin_user, url_prefix = '/admin/user/' )
+    app.register_blueprint(admin_rating_review, url_prefix ='/admin/rating-review/')
 
 def __register_login_manager(app: Flask):
     login_manager = LoginManager()

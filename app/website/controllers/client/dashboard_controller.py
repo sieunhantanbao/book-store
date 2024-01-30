@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
-from ...services import book_client_service as _book_service, wishlist_service as _wishlist_service, rating_service as _rating_service
+from ...services import book_client_service as _book_service, rating_client_service as _rating_service, wishlist_service as _wishlist_service
 dashboard = Blueprint('dashboard', __name__)
 
 @dashboard.route('/')
