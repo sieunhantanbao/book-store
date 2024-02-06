@@ -92,9 +92,9 @@
                 <br/>
                 <button class="btn ms-2 w-90 mb-2 btn-success"> Buy Now</button>
                 <br/>
-                <a href="" class="ms-2 pb-3"><small>Return policy</small></a>
+                <a tabindex="0" class="ms-2 pb-3 popover-return-policy" role="button" data-bs-placement="left"  data-bs-toggle="popover" data-bs-trigger="focus" title="Return policy" data-bs-content="Return policy content"><small>Return policy</small></a>
                 <br/>
-                <a href="" class="ms-2 pb-3"><small>Payment methods</small></a>
+                <a tabindex="0" class="ms-2 pb-3 popover-payment-method" role="button" data-bs-placement="left" data-bs-toggle="popover" data-bs-trigger="focus" title="Payment methods" data-bs-content="Payment methods content"><small>Payment methods</small></a>
                 <hr/>
                 {% if not book.in_wishlist %}
                   <button class="btn ms-2 w-90 mb-2 btn-warning add-to-wishlist" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
@@ -168,5 +168,13 @@
   {% block script %}
     <script src="{{ url_for('static', filename= '/client/js/pages/wishlist.js')}} "></script>
     <script src="{{ url_for('static', filename= '/client/js/pages/star_rating.js')}} "></script>
+    <script>
+      var popover = new bootstrap.Popover(document.querySelector('.popover-return-policy'), {
+        trigger: 'focus'
+      });
+      var popover = new bootstrap.Popover(document.querySelector('.popover-payment-method'), {
+        trigger: 'focus'
+      })
+    </script>
 {% endblock %}
     
