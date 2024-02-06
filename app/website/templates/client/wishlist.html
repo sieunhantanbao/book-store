@@ -24,11 +24,13 @@
                             </div>
                           {% endif %}
                           <div class="col-md-3 mt-1">
-                            {% if book.thumbnail != None and book.thumbnail != '' %}
-                              <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
-                            {% else %}
-                              <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
-                            {% endif %}
+                            <a href="/book/detail/{{book.slug}}">
+                              {% if book.thumbnail != None and book.thumbnail != '' %}
+                                <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
+                              {% else %}
+                                <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
+                              {% endif %}
+                            </a>
                           </div>
                           <div class="col-md-6 mt-1">
                               <h5 class="text-truncate">{{book.title}}</h5>
@@ -54,6 +56,7 @@
                                   <h4 class="mr-1">{{"${:,}".format(book.price)}}</h4>
                               </div>
                               <h6 class="text-success">Free shipping</h6>
+                              <br/>
                               <div class="d-flex flex-column mt-4">
                                 <a href="/book/detail/{{book.slug}}" class="btn btn-primary btn-sm" type="button">Details</a>
                                   <button class="btn btn-danger btn-sm mt-2 remove-from-wishlist" data-id="{{book.id}}" type="button">Remove wishlist</button>
