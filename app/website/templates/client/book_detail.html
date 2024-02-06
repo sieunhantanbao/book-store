@@ -109,79 +109,60 @@
           </div>
       </div>
       <hr/>
-      <!--Book related-->
-      <div class="d-flex justify-content-center row">
-        <div class="col-md-12">
-          <p class="h4 ps-3">Book related</p>
-          <hr/>
-        </div>
-      </div>
-      <hr/>
       <!--Customer review-->
       <div class="d-flex justify-content-center row">
         <div class="col-md-4">
-          <p class="h4 ps-3">Customer Reviews</p>
-          <hr/>
-          <div class="ps-3">
-             {{ star_rating.rating_detail() }}
+          <div class="row">
+              <div class="col-md-12 customer-review-box">
+                  <h3>Customer Reviews</h3>
+                  <div class="ps-3">
+                    {{ star_rating.rating_detail() }}
+                  </div>
+              {% if user.is_authenticated %}
+                  <div class="ps-3 mt-3">
+                    <form>
+                      <textarea class="form-control form-input" id="customer_review" name="customer_review" rows="4" placeholder="Write your review"></textarea>
+                      <p class="mt-2">How would you rate for this book?</p>
+                      {{ star_rating.rating_for_vote(book.id, 0, 0)}}
+                      <input type="hidden" value="{{book.id}}" id="hdf_book_id" />
+                      <input type="hidden" value="-1" id="hdf_rating_value" />
+                      <input type="button" id="submit-review" class="btn btn-primary mt-2 mb-2 disabled" value="Submit">
+                      <br/>
+                      <span id="book-review-form-message" class="mt-3"></span>
+                    </form>
+                  </div>
+                {% else %}
+                  <div class="ps-3 mt-3">
+                      <a class="btn btn-outline-primary btn-sm" href="/auth/login"> Login to post a review </a>
+                  </div>
+                {% endif %}
+              </div>
           </div>
-       {% if user.is_authenticated %}
-
-          <div class="ps-3 mt-3">
-            <form>
-              <textarea class="form-control form-input" id="customer_review" name="customer_review" rows="4" placeholder="Write your review"></textarea>
-              <p class="mt-2">How would you rate for this book?</p>
-              {{ star_rating.rating_for_vote(book.id, 0, 0)}}
-              <input type="hidden" value="{{book.id}}" id="hdf_book_id" />
-              <input type="hidden" value="-1" id="hdf_rating_value" />
-              <input type="button" id="submit-review" class="btn btn-primary mt-2 mb-2 disabled" value="Submit">
-              <br/>
-              <span id="book-review-form-message" class="mt-3"></span>
-            </form>
-          </div>
-        {% else %}
-           <div class="ps-3 mt-3">
-              <a class="btn btn-outline-primary btn-sm" href="/auth/login"> Login to post a review </a>
-           </div>
-        {% endif %}
         </div>
         <div class="col-md-8">
-          <p class="h4">Comments</p>
-          <hr/>
-            <div class="col-md-12 pe-2">
-              <ul class="timeline">
-                {% for book_comment in book_comments %}
-                  {% if loop.index%2 != 0 %}
-                    <li>
-                      <div class="timeline-badge"><i class="fas fa-edit"></i></div>
-                      <div class="timeline-panel">
-                        <div class="timeline-heading">
-                          <p class="timeline-title">{{ star_rating.display_rating_comment(book_comment.rating_value) }}</p>
-                          <p><small class="text-muted"><i class="fas fa-user" aria-hidden="true"></i> {{book_comment.user.first_name +' '+ book_comment.user.last_name }} <i class="fas fa-clock"></i> {{book_comment.created_at.strftime('%B %d, %Y %H:%M:%S')}}</small></p>
+          <div class="row">
+            <div class="col-md-12 pe-4">
+                <section class="content-item" id="comments">
+                <div class="container">   
+                  <div class="row">
+                        <div class="col-sm-12">
+                          <h3>Comments (<span class="text-danger fw-bold">{{book_comments | length}}</span>)</h3> 
+                           {% for book_comment in book_comments %}
+                                <div class="media">
+                                    <div class="media-body">
+                                        {{ star_rating.display_rating_comment(book_comment.rating_value) }}
+                                        <p>{{book_comment.comment}}</p>
+                                        <small class="text-muted float-start"><i class="fas fa-user" aria-hidden="true"></i> {{book_comment.user.first_name +' '+ book_comment.user.last_name }}</small>
+                                        <small class="text-muted float-end"><i class="fas fa-clock"></i> {{book_comment.created_at.strftime('%B %d, %Y %H:%M:%S')}}</small>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                        <div class="timeline-body">
-                          <p>{{book_comment.comment}}</p>
-                        </div>
-                      </div>
-                    </li>
-                  {% else %}
-                    <li  class="timeline-inverted">
-                      <div class="timeline-badge"><i class="fas fa-edit"></i></div>
-                      <div class="timeline-panel">
-                        <div class="timeline-heading">
-                          <p class="timeline-title">{{ star_rating.display_rating_comment(book_comment.rating_value) }}</p>
-                          <p><small class="text-muted"><i class="fas fa-user" aria-hidden="true"></i> {{book_comment.user.first_name +' '+ book_comment.user.last_name }} <i class="fas fa-clock"></i> {{book_comment.created_at.strftime('%B %d, %Y  %H:%M:%S')}}</small></p>
-                        </div>
-                        <div class="timeline-body">
-                          <p>{{book_comment.comment}}</p>
-                        </div>
-                      </div>
-                    </li>
-                  {% endif %}
-                  
-                {% endfor %}
-              </ul>
+                    </div>
+                </div>
+              </section>
             </div>
+          </div>
         </div>
       </div>
     </div>

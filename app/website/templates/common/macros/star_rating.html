@@ -131,7 +131,7 @@
   {% set rating_value = 0 if rating_value == None else rating_value %}
   <div class="rating" title="Customer rating">
         {% for star_meaning in ['Bad', 'Poor', 'Average', 'Great', 'Excellent'] %}
-          <div class="star" style="font-size:18px;">
+          <div class="star" style="font-size:15px;">
             {% if rating_value < loop.index %}
               <span class="full" data-value="{{loop.index}}" title="{{star_meaning}}"></span>
             {% else %}
