@@ -6,27 +6,24 @@
     .rating {
       text-align: left !important;
     }
-    .score {
-      padding-right: 70px !important;
-    }
   </style>
   <link href="{{ url_for('static', filename = '/client/css/pages/star_rating.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename = '/client/css/pages/book_detail.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %} 
-    <div class="mt-0 mb-2 pt-5 pb-5 bg-white">
-      <div class="d-flex justify-content-center row">
-          <div class="col-md-3">
+    <div class="mt-0 mb-2 pt-2 pb-5 bg-white">
+      <div class="row">
+          <div class="col-md-3" style="box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);margin-left: 25px;">
               {% if book and book.thumbnail != None and book.thumbnail != '' %}
                 <img class="img-fluid img-responsive rounded product-image ps-3" style="height: 500px;width: 290px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
               {% else %}
                 <img class="img-fluid img-responsive rounded product-image ps-3" style="height: 500px;width: 290px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
               {% endif %}
           </div>
-          <div class="col-md-7">
+          <div class="col-md-6" style="box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);margin-left: 12px;">
             <figure>
-              <blockquote class="blockquote">
+              <blockquote class="blockquote mt-4">
                 <h3>{{book.title}}</h3>
               </blockquote>
               <figcaption class="blockquote-footer">
@@ -47,48 +44,47 @@
                   <br/>
                   <i class="fas fa-pager d-flex justify-content-center"></i>
                   <br/>
-                  <span class="fw-bold d-flex justify-content-center">{{book.pages}} pages</span>
+                  <small class="fw-bold d-flex justify-content-center">{{book.pages}} pages</small>
                 </div>
                 <div class="col-md-2">
                   <small class="d-flex justify-content-center">Language</small>
                   <br/>
                   <i class="fas fa-globe d-flex justify-content-center"></i>
                   <br/>
-                  <span class="fw-bold d-flex justify-content-center">{{book.language}}</span>
+                  <small class="fw-bold d-flex justify-content-center">{{book.language}}</small>
                 </div>
                 <div class="col-md-2">
                   <small class="d-flex justify-content-center">Publisher</small>
                   <br/>
                   <i class="fas fa-book d-flex justify-content-center"></i>
                   <br/>
-                  <span class="fw-bold d-flex justify-content-center">{{book.publisher}}</span>
+                  <small class="fw-bold d-flex justify-content-center">{{book.publisher}}</small>
                 </div>
                 <div class="col-md-2">
                   <small class="d-flex justify-content-center">Publication on</small>
                   <br/>
                   <i class="far fa-calendar-alt d-flex justify-content-center"></i>
                   <br/>
-                  <span class="fw-bold d-flex justify-content-center">{{book.publish_date.strftime('%m/%d/%Y')}}</span>
+                  <small class="fw-bold d-flex justify-content-center">{{book.publish_date.strftime('%m/%d/%Y')}}</small>
                 </div>
                 <div class="col-md-2">
                   <small class="d-flex justify-content-center">Dimensions</small>
                   <br/>
                   <i class="fas fa-ruler-combined d-flex justify-content-center"></i>
                   <br/>
-                  <span class="fw-bold d-flex justify-content-center">{{book.dimensions}}</span>
+                  <small class="fw-bold d-flex justify-content-center">{{book.dimensions}}</small>
                 </div>
                 <div class="col-md-2">
                   <small class="d-flex justify-content-center">ISBN</small>
                   <br/>
                   <i class="fas fa-barcode d-flex justify-content-center"></i>
                   <br/>
-                  <span class="fw-bold d-flex justify-content-center">{{book.isbn}}</span>
+                  <small class="fw-bold d-flex justify-content-center">{{book.isbn}}</small>
                 </div>
             </div>
-            <hr/>
+            <br/>
           </div>
-          <div class="col-md-2">
-            <div style="border: 3px solid #bdbfbe; border-radius: 4px;height: 500px; margin-right: 4px;">
+          <div class="col-md-2" style="width:19.33333%;box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);margin-left: 12px;">
                 <p class="h2 text-danger fw-bold d-flex justify-content-center pt-5 pb-5">{{"${:,}".format(book.price)}}</p>
                 <hr/>
                 <p class="ps-2">In stock: <span class="fw-bold">100</span></p>
@@ -105,7 +101,6 @@
                 {% else %}
                   <button class="btn ms-2 w-90 mb-2 btn-danger add-to-wishlist disabled" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
                 {% endif %}
-            </div>
           </div>
       </div>
       <hr/>
