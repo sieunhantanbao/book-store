@@ -1,90 +1,25 @@
 {% extends "common/layout.html" %}
 {% import "common/macros/star_rating.html" as star_rating %}
+{% import "client/macros/category_list.html" as category %}
+{% import "client/macros/featured_books_carousel.html" as book_carousel %}
 
 {% block style %} 
 <link href="{{ url_for('static', filename = '/client/css/pages/star_rating.css') }}" rel="stylesheet">
-  {% for featured_book in featured_books %}
-    <style>
-      .carousel-item:nth-child({{loop.index}}) {
-      background-image: url('data:image/gif;base64, {{featured_book.thumbnail}}');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-      }
-    </style>
-  {% endfor %}
-
+<div id="featured-books-carousel-img-bg">
+</div>
 {% endblock %}
 
 {% block content %}
   <div class="mt-0 mb-5">
     <div class="d-flex justify-content-center row">
       <div class="col-md-12">
-          <div id="carouselBookFeatured" class="carousel slide my-carousel" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-            {% for featured_book in featured_books %}
-                  {% if loop.index > 1 %}
-                    <button type="button" data-bs-target="#carouselBookFeatured" data-bs-slide-to="{{loop.index - 1}}" aria-label="Slide {{loop.index}}"></button>
-                  {% else %}
-                     <button type="button" data-bs-target="#carouselBookFeatured" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                  {% endif %}
-            {% endfor %}
-             
-            </div>
-            <div class="carousel-inner">
-              {% for featured_book in featured_books %}
-                  {% if loop.index > 1 %}
-                    <div class="carousel-item">
-                      <div class="carousel-caption my-carousel-caption">
-                        <h3 class="carousel-title">{{featured_book.title}}</h3>
-                        <h5 class="carousel-description">{{featured_book.short_description}}</h5>
-                        <a href="/book/detail/{{featured_book.slug}}" class="btn btn-lg btn-outline-warning btn-primary">Explore</a>
-                      </div>
-                  </div>
-                  {% else %}
-                    <div class="carousel-item active">
-                    <div class="carousel-caption my-carousel-caption">
-                      <h3 class="carousel-title">{{featured_book.title}}</h3>
-                      <h5 class="carousel-description">{{featured_book.short_description}}</h5>
-                      <a href="/book/detail/{{featured_book.slug}}" class="btn btn-lg btn-outline-warning btn-primary">Explore</a>
-                    </div>
-                  </div>
-                  {% endif %}
-              {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselBookFeatured" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselBookFeatured" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
+          {{ book_carousel.featured_books_carousel() }}
       </div>
       <div class="col-md-12">
         <br/>
       </div>
       <div class="col-md-12">
-          <div class="card">
-            <div class="card-header text-black fw-bold"><i class="fas fa-list-alt fa-2xl"></i> BOOK CATEGORIES</div>
-            <div class="card-body">
-                <div class="row">
-                    {% for category in categories %}
-                      <div class="col-md-2">
-                          <div class="row bg-white border rounded mb-3 card" style="height: 23rem;margin-right:5px;">
-                            <img src="data:image/gif;base64, {{category.thumbnail}}" class="card-img-top img img-responsive" style="height:180px;" alt="{{ category.name }}">
-                            <div class="card-body">
-                              <h5 class="card-title">{{ category.name }}</h5>
-                              <p class="card-text">{{ category.short_description }}</p>
-                              <a href="/category/detail/{{category.id}}" class="btn btn-primary">Details</a>
-                            </div>
-                          </div>
-                      </div>
-                    {% endfor %}
-                </div> <!-- Row -->
-            </div> <!-- Card body -->
-          </div> <!-- Card -->
+          {{ category.category_list() }}
       </div> <!-- col-md-12 -->
       <div class="col-md-12">
         <br/>
@@ -94,62 +29,64 @@
             <div class="card-header text-black fw-bold"><i class="fas fa-book fa-2xl"></i> BOOKS</div>
             <div class="card-body">
                 <div class="row">
-                    {% for book in books %}
-                    <div class="col-md-6">
-                        <div class="row p-2 bg-white border rounded mt-2 position-relative" style="margin-right:1px;height:200px;">
-                          {% if book.is_featured %}
-                            <div class="ribbon-wrapper ribbon-lg">
-                              <div class="ribbon text-white" style="background-color:red;">
-                                Featured
+                    {% if books != None %}
+                      {% for book in books if books %}
+                      <div class="col-md-6">
+                          <div class="row p-2 bg-white border rounded mt-2 position-relative" style="margin-right:1px;height:200px;">
+                            {% if book.is_featured %}
+                              <div class="ribbon-wrapper ribbon-lg">
+                                <div class="ribbon text-white" style="background-color:red;">
+                                  Featured
+                                </div>
                               </div>
-                            </div>
-                          {% endif %}
-                          <div class="col-md-3 mt-1">
-                            <a href="/book/detail/{{book.slug}}">
-                              {% if book.thumbnail != None and book.thumbnail != '' %}
-                                <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
-                              {% else %}
-                                <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
-                              {% endif %}
-                            </a>
-                          </div>
-                          <div class="col-md-6 mt-1">
-                              <h5 class="text-truncate">{{book.title}}</h5>
-                              <div class="d-flex flex-row">
-                                  <div class="ratings mr-2">
-                                     {{ star_rating.rating(book.id, book.total_ratings, book.average_rating_value) }}
-                                  </div>
-                              </div>
-                              <div class="mt-1 mb-1">
-                                <i class="fas fa-user text-success"></i> <span> {{book.author}}</span>
-                                <i class="fas fa-book text-success"></i> </span><span> {{book.isbn}}</span>
-                                <i class="fas fa-newspaper text-success"></i> <span> {{book.publisher}}<br></span>
-                              </div>
-                              <div class="mt-1 mb-1">
-                                <span>{{book.dimession}}</span>
-                                <i class="fas fa-language text-success"></i> <span> {{book.language}}</span>
-                                <i class="fas fa-calendar text-success"></i> <span> {{book.publish_date.strftime('%m/%d/%Y')}}<br></span>
-                              </div>
-                              <p class="text-justify text-truncate para mb-0">{{book.short_description}}<br><br></p>
-                          </div>
-                          <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                              <div class="d-flex flex-row align-items-center">
-                                  <h4 class="mr-1">{{"${:,}".format(book.price)}}</h4>
-                              </div>
-                              <h6 class="text-success">Free shipping</h6>
-                              <div class="d-flex flex-column mt-4">
-                                <br/>
-                                <a class="btn btn-primary btn-sm" href="/book/detail/{{book.slug}}">Details</a>
-                                {% if not book.id in wishlists %}
-                                  <button class="btn btn-outline-success btn-sm mt-2 add-to-wishlist" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
+                            {% endif %}
+                            <div class="col-md-3 mt-1">
+                              <a href="/book/detail/{{book.slug}}">
+                                {% if book.thumbnail != None and book.thumbnail != '' %}
+                                  <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
                                 {% else %}
-                                  <button class="btn btn-danger btn-sm mt-2 add-to-wishlist disabled" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
+                                  <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
                                 {% endif %}
-                              </div>
+                              </a>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <h5 class="text-truncate">{{book.title}}</h5>
+                                <div class="d-flex flex-row">
+                                    <div class="ratings mr-2">
+                                      {{ star_rating.rating(book.id, book.total_ratings, book.average_rating_value) }}
+                                    </div>
+                                </div>
+                                <div class="mt-1 mb-1">
+                                  <i class="fas fa-user text-success"></i> <span> {{book.author}}</span>
+                                  <i class="fas fa-book text-success"></i> </span><span> {{book.isbn}}</span>
+                                  <i class="fas fa-newspaper text-success"></i> <span> {{book.publisher}}<br></span>
+                                </div>
+                                <div class="mt-1 mb-1">
+                                  <span>{{book.dimession}}</span>
+                                  <i class="fas fa-language text-success"></i> <span> {{book.language}}</span>
+                                  <i class="fas fa-calendar text-success"></i> <span> {{book.publish_date.strftime('%m/%d/%Y')}}<br></span>
+                                </div>
+                                <p class="text-justify text-truncate para mb-0">{{book.short_description}}<br><br></p>
+                            </div>
+                            <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                                <div class="d-flex flex-row align-items-center">
+                                    <h4 class="mr-1">{{"${:,}".format(book.price)}}</h4>
+                                </div>
+                                <h6 class="text-success">Free shipping</h6>
+                                <div class="d-flex flex-column mt-4">
+                                  <br/>
+                                  <a class="btn btn-primary btn-sm" href="/book/detail/{{book.slug}}">Details</a>
+                                  {% if not book.id in wishlists %}
+                                    <button class="btn btn-outline-success btn-sm mt-2 add-to-wishlist" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
+                                  {% else %}
+                                    <button class="btn btn-danger btn-sm mt-2 add-to-wishlist disabled" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
+                                  {% endif %}
+                                </div>
+                            </div>
                           </div>
-                        </div>
-                    </div>
-                    {% endfor %}
+                      </div>
+                      {% endfor %}
+                    {% endif %}
                 </div> <!-- Row -->
             </div> <!-- Card body -->
           </div> <!-- Card -->
@@ -161,7 +98,10 @@
   {% endblock %}
 
 {% block script %}
-     <script src="{{ url_for('static', filename= '/client/js/pages/dashboard.js')}} "></script>
-     <script src="{{ url_for('static', filename= '/client/js/pages/wishlist.js')}} "></script>
-     <script src="{{ url_for('static', filename= '/client/js/pages/star_rating.js')}} "></script>
+    <script src="{{ url_for('static', filename= '/client/js/pages/dashboard.js')}} "></script>
+    <script src="{{ url_for('static', filename= '/client/js/pages/wishlist.js')}} "></script>
+    <script src="{{ url_for('static', filename= '/client/js/pages/star_rating.js')}} "></script>
+    <script src="{{ url_for('static', filename= '/client/js/components/category.js')}} "></script>
+    <script src="{{ url_for('static', filename= '/client/js/components/featured-books-carousel.js')}} "></script>
+    
 {% endblock %}

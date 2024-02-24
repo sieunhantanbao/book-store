@@ -10,3 +10,5 @@ class Category(db_context.Model):
     created_at = db_context.Column(db_context.DateTime(timezone = True), nullable=False, default = datetime.now())
     updated_at = db_context.Column(db_context.DateTime(timezone = True), default = None)
     books = db_context.relationship('Book', backref='category')
+    def as_dict(self):
+        return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}

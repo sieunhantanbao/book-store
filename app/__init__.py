@@ -4,12 +4,14 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
+import redis
 
 # Load environment variables from .env file
 load_dotenv()
-
+# AQLAlchemy DB context
 db_context = SQLAlchemy()
-
+# Caching with Redis
+redis_client = redis.Redis(host=os.environ['REDIS_HOST'], port=os.environ['REDIS_PORT'], db=0)
 
 def __page_not_found(e):
     return render_template('common/404.html'), 404
@@ -18,7 +20,7 @@ def create_app() -> Flask:
     app = Flask(__name__, template_folder='website/templates', static_folder='website/static')
     app.config['SECRET_KEY'] = os.environ['APP_SECRET_KEY']
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
-    
+
     db_context.init_app(app)
     migrate = Migrate(app, db_context)
 

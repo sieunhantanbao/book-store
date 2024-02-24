@@ -1,0 +1,36 @@
+{% macro featured_books_carousel() -%}
+<div id="carouselBookFeatured" class="carousel slide my-carousel">
+    <div class="carousel-indicators" id="book-carousel-indicators">
+        <!--Placeholder here-->
+        <div class="row">
+          <div class="col-md-5"></div>
+          <div class="col-md-2"><img id="featured-book-loading-icon" src="{{ url_for('static', filename = '/client/images/loading_icon.gif') }}" height="64" width="64" /></div>
+          <div class="col-md-5"></div>
+        </div>
+    </div>
+    <div class="carousel-inner" id="book-carousel-inner">
+        <!--Placeholder here-->
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselBookFeatured" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselBookFeatured" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <div class="d-none" id="book-carousel-indicators-template">
+    <button type="button" data-bs-target="#carouselBookFeatured" data-bs-slide-to="@@slideIndexMinus1@@" class="@@isActive@@" aria-current="@@isAriaCurrent@@" aria-label="Slide @@slideIndex@@"></button>
+  </div>
+  <div class="d-none" id="book-carousel-inner-template">
+    <div class="carousel-item @@isActive@@">
+        <div class="carousel-caption my-carousel-caption">
+        <h3 class="carousel-title">@@featured_book.title@@</h3>
+        <h5 class="carousel-description">@@featured_book.short_description@@</h5>
+        <a href="/book/detail/@@featured_book.slug@@" class="btn btn-lg btn-outline-warning btn-primary">Explore</a>
+        </div>
+    </div>
+  </div>
+{%- endmacro %}

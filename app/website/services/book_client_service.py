@@ -12,20 +12,30 @@ def get_by_id(id_or_slug):
 
 def get_all():
     """
-    Get all books from database
+    Get all books
     """
     books = Book.query.filter_by(is_published=True).all()
     return books
 
-def get_all_categories():
+def get_all_categories(size: int = 0):
     """
-    Get all categories
+    Get Categories from the database
     """
-    categories = Category.query.all()
-    return categories
+    if size and size > 0:
+        return Category.query.limit(size).all()
+    else:
+        return Category.query.all()
 
 def get_book_wishlists(user_id):
     """
     Get all my book wishlist
     """
     return db_context.session.query(Book, WishList).join(WishList).filter(WishList.user_id==user_id, Book.id==WishList.book_id).all()
+
+def get_featured():
+    """
+    Get all featured books
+    """
+    books = Book.query.filter_by(is_published=True, is_featured=True).all()
+    return books
+
