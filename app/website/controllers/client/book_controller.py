@@ -1,5 +1,9 @@
 from flask import Blueprint, abort, render_template, request, make_response, jsonify
 from flask_login import login_required, current_user
+from app import redis_client
+import json
+from app.website.models.constants import constants
+
 from ...services import book_client_service as _book_service, rating_client_service as _rating_service, wishlist_service as _wishlist_service
 book = Blueprint('book', __name__)
 
@@ -39,28 +43,6 @@ def book_detail(id_or_slug):
 
     return render_template('client/book_detail.html', book = book, rating_statistic = data, book_comments = book_comments, user=current_user)
 
-
-@book.route('/add-wishlist', methods=['POST'])
-@login_required
-def add_to_wishlist():
-    "API to save/add a book to wishlist"
-    if current_user and current_user.is_authenticated:
-        data = request.json
-        result = _wishlist_service.create(current_user.id, data['book_id'])
-        return make_response(jsonify(success=result), 200)
-    else:
-        return make_response(jsonify(success=False), 401)
-
-
-@book.route('/remove-wishlist', methods=['POST'])
-@login_required
-def remove_from_wishlist():
-    "API to remove a book from the wishlist"
-    data = request.json
-    result = _wishlist_service.delete_by_user_and_book(current_user.id, data['book_id'])
-    return make_response(jsonify(success=result), 200)
-
-
 @book.route('/wishlist', methods = ['GET'])
 @login_required
 def my_book_wishlists():
@@ -82,6 +64,26 @@ def my_book_wishlists():
         
     return render_template('client/wishlist.html', books = books ,user = current_user)
 
+############### APIs ##################################
+@book.route('/add-wishlist', methods=['POST'])
+@login_required
+def add_to_wishlist():
+    "API to save/add a book to wishlist"
+    if current_user and current_user.is_authenticated:
+        data = request.json
+        result = _wishlist_service.create(current_user.id, data['book_id'])
+        return make_response(jsonify(success=result), 200)
+    else:
+        return make_response(jsonify(success=False), 401)
+
+
+@book.route('/remove-wishlist', methods=['POST'])
+@login_required
+def remove_from_wishlist():
+    "API to remove a book from the wishlist"
+    data = request.json
+    result = _wishlist_service.delete_by_user_and_book(current_user.id, data['book_id'])
+    return make_response(jsonify(success=result), 200)
 
 @book.route('/add-review', methods = ['POST'])
 @login_required
@@ -133,3 +135,46 @@ def __get_star_rating_statistic(book_id):
         elif result.rating_value == 5.0:
             data['total_rating_5'] = result.total_ratings
     return success, data
+
+@book.route('/categories', methods = ['GET'])
+def get_categories():
+    """
+    API Get All Categories with Redis cache
+    """
+    get_full = request.args.get('all')
+    if get_full != None and get_full == "false":
+        # Get first 6 categories
+        serialized_categories_cached = redis_client.get(constants.REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES)
+        if serialized_categories_cached == None:
+            categories = _book_service.get_all_categories(6)
+            categories_dic = [category.as_dict() for category in categories]
+            serialized_categories_list = json.dumps(categories_dic)
+            redis_client.set(constants.REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES, serialized_categories_list)
+            serialized_categories_cached = serialized_categories_list
+    else:
+        # Get full categories
+        serialized_categories_cached = redis_client.get(constants.REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES)
+        if serialized_categories_cached == None:
+            categories = _book_service.get_all_categories()
+            categories_dic = [category.as_dict() for category in categories]
+            serialized_categories_list = json.dumps(categories_dic)
+            redis_client.set(constants.REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES, serialized_categories_list)
+            serialized_categories_cached = serialized_categories_list
+    
+    return make_response(jsonify(json.loads(serialized_categories_cached)), 200)
+
+
+@book.route('/featured-books', methods = ['GET'])
+def get_featured_books():
+    """
+    API Get featured books with Redis cache
+    """
+    serialized_featured_books_cached = redis_client.get(constants.REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS)
+    if serialized_featured_books_cached == None:
+        featured_books = _book_service.get_featured()
+        featured_books_dic = [book.as_dict() for book in featured_books]
+        serialized_featured_books_list = json.dumps(featured_books_dic)
+        redis_client.set(constants.REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS, serialized_featured_books_list)
+        serialized_featured_books_cached = serialized_featured_books_list
+    return make_response(jsonify(json.loads(serialized_featured_books_cached)), 200)
+############### END APIs ##############################

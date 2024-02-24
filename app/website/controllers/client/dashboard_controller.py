@@ -9,9 +9,7 @@ def home():
     """
     Dashboard page
     """
-    categories = _book_service.get_all_categories()
     books = _book_service.get_all()
-    featured_books = [book for book in books if book.is_featured]
     book_average_ratings = _rating_service.get_all_average_rating()
     for book in books:
         average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
@@ -26,17 +24,13 @@ def home():
         wishlists = _wishlist_service.get_all(current_user.id)
         if wishlists:
             wishlists = [wishlist.book_id for wishlist in wishlists]
-        return render_template('client/index.html', 
-                            featured_books = featured_books,
-                            categories = categories,
+        return render_template('client/index.html',
                             books = books,
                             wishlists = wishlists,
                             book_average_ratings = book_average_ratings,
                             user = current_user)
     else:
-        return render_template('client/index.html', 
-                            featured_books = featured_books,
-                            categories = categories,
+        return render_template('client/index.html',
                             books = books,
                             book_average_ratings = book_average_ratings,
                             user = None)
