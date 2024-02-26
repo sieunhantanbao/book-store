@@ -12,6 +12,39 @@ def list():
     Get all Rating reviews
     """
     if current_user.is_authenticated:
-        rating_reviews = _rating_service.get_all()
+        rating_reviews = _rating_service.get_all_pending_approval()
         return render_template('admin/rating_review_list.html', rating_reviews = rating_reviews, user = current_user)
     return redirect(url_for('auth.login'))
+
+@admin_rating_review.route('/approve/<rating_id>', methods=['POST'])
+@login_required
+def approve(rating_id):
+    """
+    API to approve a review
+    """
+    if current_user.is_authenticated:
+        success = _rating_service.approve(rating_id)
+        return make_response(jsonify(success = success), 200)
+    return make_response(jsonify(success = False), 401)
+
+@admin_rating_review.route('/delete/<rating_id>', methods=['POST'])
+@login_required
+def delete(rating_id):
+    """
+    API to approve a review
+    """
+    if current_user.is_authenticated:
+        success = _rating_service.delete(rating_id)
+        return make_response(jsonify(success = success), 200)
+    return make_response(jsonify(success = False), 401)
+
+@admin_rating_review.route('/approve-all/', methods=['POST'])
+@login_required
+def approve_all():
+    """
+    API to approve all reviews
+    """
+    if current_user.is_authenticated:
+        success = _rating_service.approve_all()
+        return make_response(jsonify(success = success), 200)
+    return make_response(jsonify(success = False), 401)
