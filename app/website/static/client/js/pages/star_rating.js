@@ -15,7 +15,7 @@
         var book_id = $(self).data('id');
         $.ajax({
           type: 'GET',
-          url:'/book/star_rating_statistic/' + book_id,
+          url:'/book/api/star_rating_statistic/' + book_id,
           data: null,
           contentType: 'application/json'
         }).done(function(response) {
@@ -81,7 +81,7 @@ function loadStarRatingDetail(){
   if(rating_detail_div.length > 0){
     $.ajax({
       type: 'GET',
-      url:'/book/star_rating_statistic/' + book_id,
+      url:'/book/api/star_rating_statistic/' + book_id,
       data: null,
       contentType: 'application/json'
     }).done(function(response) {
@@ -126,7 +126,7 @@ function loadStarRatingDetail(){
       var review_comment = $("#customer_review").val();
       $.ajax({
         type: 'POST',
-        url: '/book/add-review',
+        url: '/book/api/add-review',
         contentType: 'application/json',
         data: JSON.stringify({ "book_id": book_id, "rating_value": rating_value, "review_comment": review_comment }),
       }).done(function (response) {

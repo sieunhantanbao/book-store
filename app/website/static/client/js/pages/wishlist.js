@@ -8,7 +8,7 @@
       var bookId = self.data('id');
       $.ajax({
         type: 'POST',
-        url: '/book/add-wishlist',
+        url: '/book/api/add-wishlist',
         contentType: 'application/json',
         data: JSON.stringify({ "book_id": bookId }),
       }).done(function (response) {
@@ -28,7 +28,7 @@
         var bookId = self.data('id');
         $.ajax({
           type: 'POST',
-          url: '/book/remove-wishlist',
+          url: '/book/api/remove-wishlist',
           contentType: 'application/json',
           data: JSON.stringify({ "book_id": bookId }),
         }).done(function (response) {
