@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $.ajax({
         type: 'GET',
-        url:'/book/featured-books',
+        url:'/book/api/featured-books',
         data: null,
         contentType: 'application/json'
       }).done(function(responses) {
@@ -53,6 +53,5 @@ $(document).ready(function(){
           console.error(msg);
       }).always(function(){
         $('#featured-book-loading-icon').hide();
-      })
-      ;
+      });
 })

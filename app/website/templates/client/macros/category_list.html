@@ -1,5 +1,6 @@
-{% macro category_list() -%}
+{% macro category_list(all = False) -%}
     <div class="card">
+        <input type="hidden" id="is_get_full_cats" value="{{all}}" />
         <div class="card-header text-black fw-bold"><i class="fas fa-list-alt fa-2xl"></i> BOOK CATEGORIES</div>
         <div class="card-body">
             <div class="row">
@@ -11,13 +12,15 @@
             <div class="row category-items">
             </div> <!-- Row -->
         </div> <!-- Card body -->
-        <div class="card-footer">
-            <div class="row">
-                <div class="col-md-12">
-                    <a href="/book/categories/all" class="btn btn-info float-end"><small>View all</small></a>
+        {% if all == False %}
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="/book/categories/all" class="btn btn-info float-end"><small>View all</small></a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div> <!-- Card -->
     <div id="category-item-template" class="d-none">
         <div class="col-md-2">

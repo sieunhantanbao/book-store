@@ -1,0 +1,23 @@
+{% extends "common/layout.html" %} 
+{% import "client/macros/category_list.html" as category %}
+
+{% block style %} 
+
+{% endblock %}
+
+{% block content %}
+  <div class="mt-0 mb-5">
+    <div class="d-flex justify-content-center row">
+      <div class="col-md-12">
+          {{ category.category_list(true) }}
+      </div> <!-- col-md-12 -->
+      <div class="col-md-12">
+        <br/>
+      </div>
+    </div> <!-- d-flex justify-content-center row -->
+  </div> <!-- mt-5 mb-5 -->  
+{% endblock %}
+
+{% block script %}
+  <script src="{{ url_for('static', filename= '/client/js/components/category.js')}} "></script>
+{% endblock %}

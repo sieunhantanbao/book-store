@@ -1,7 +1,8 @@
 $(document).ready(function(){
+    var is_get_full_cats = $("#is_get_full_cats").val();
     $.ajax({
         type: 'GET',
-        url:'/book/categories?all=false',
+        url:'/book/api/categories?all='+ is_get_full_cats,
         data: null,
         contentType: 'application/json'
       }).done(function(responses) {
