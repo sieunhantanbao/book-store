@@ -16,11 +16,13 @@ redis_client = redis.Redis(host=os.environ['REDIS_HOST'], port=os.environ['REDIS
 def __page_not_found(e):
     return render_template('common/404.html'), 404
 
+
+
 def create_app() -> Flask:
     app = Flask(__name__, template_folder='website/templates', static_folder='website/static')
     app.config['SECRET_KEY'] = os.environ['APP_SECRET_KEY']
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
-
+    
     db_context.init_app(app)
     migrate = Migrate(app, db_context)
 

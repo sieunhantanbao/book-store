@@ -1,6 +1,7 @@
 import base64
 from flask import Request
 from app.website.models.validations.auth_validation import ChangePasswordForm, ProfileForm, RegistrationForm
+from app.website.utilities.extensions import allowed_file, upload_file
 from ..models.user import User
 from werkzeug.security import generate_password_hash
 from datetime import datetime
@@ -52,7 +53,8 @@ def update(user:User, form:ProfileForm, request:Request):
     user.address = request.form.get('address')
     user.experience_in = request.form.get('experience_in')
     user.addition_detail = request.form.get('addition_detail')
-    user.date_of_birth = datetime.strptime(request.form.get('date_of_birth'), '%m/%d/%Y')
+    if request.form.get('date_of_birth'):
+        user.date_of_birth = datetime.strptime(request.form.get('date_of_birth'), '%m/%d/%Y')
     user.updated_at = datetime.now()
     # Update database
     db_context.session.commit()
@@ -63,8 +65,9 @@ def update_profile_photo(user: User, request:Request):
     """
     if 'file' in request.files:
         uploaded_file = request.files['file']
-        if uploaded_file.filename != '':
-            user.photo = base64.b64encode(uploaded_file.read())
+        if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
+            file_name = upload_file(uploaded_file)
+            user.photo_url = file_name
             # Update database
             db_context.session.commit()
     # else donothing

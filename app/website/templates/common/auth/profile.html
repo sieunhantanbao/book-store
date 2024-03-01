@@ -2,15 +2,15 @@
 {% block title %} My Profile {% endblock %}
 {% block content %}
 <form method="post" action="/auth/profile">
-    <div class="row">
+    <div class="row" style="background-color:white;">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    {% if user.photo != None and user.photo != '' %}
+                    {% if user.photo_url != None and user.photo_url != '' %}
                         <img id="img_user_photo" class="rounded-circle mt-5" width="150px" height="180px" alt="{{ user.email }}"
-                        src="data:image/png;base64, {{ user.photo.decode('utf-8') }}" />
+                        src="{{ url_for('static', filename = 'files_uploaded/' + user.photo_url) }}" />
                     {% else %}
                         <img id="img_user_photo" class="rounded-circle mt-5" width="150px" height="180px" alt="{{ user.email }}"
-                        src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" />
+                        src="{{ url_for('static', filename = 'admin/dist/img/no-image.png') }}" />
                     {% endif %}
                     
                     <input type="file" name="file_photo" id="file_photo" class="my-custom-file-input" accept=".png,.jpg" />
@@ -122,7 +122,7 @@
 </form>
 {% endblock %}
 
-{% block scripts %} 
+{% block script %} 
     <script src="{{ url_for('static', filename= 'client/js/pages/profile.js')}} "></script>
     <script>
         $(document).ready(function(){
@@ -139,7 +139,7 @@
                     enctype: 'multipart/form-data',
                     processData: false,
                     success: function (response) {
-                        $("#img_user_photo").attr('src','data:image/png;base64, ' + response.user_photo);
+                        $("#img_user_photo").attr('src','/static/files_uploaded/' + response.user_photo);
                     }
                 });
             });

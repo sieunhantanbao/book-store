@@ -15,7 +15,7 @@ class Book(db_context.Model):
     pages = db_context.Column(db_context.Integer)
     dimensions = db_context.Column(db_context.String(150))
     language = db_context.Column(db_context.NVARCHAR(50))
-    thumbnail = db_context.Column(db_context.Text)
+    thumbnail_url = db_context.Column(db_context.Text)
     sort_order = db_context.Column(db_context.Integer)
     is_featured = db_context.Column(db_context.Boolean, nullable=False, default = False)
     is_published = db_context.Column(db_context.Boolean, nullable=False, default = False)

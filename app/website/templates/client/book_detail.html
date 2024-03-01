@@ -14,11 +14,11 @@
 {% block content %} 
     <div class="mt-0 mb-2 pt-2 pb-5 bg-white">
       <div class="row">
-          <div class="col-md-3" style="box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);margin-left: 25px;">
-              {% if book and book.thumbnail != None and book.thumbnail != '' %}
-                <img class="img-fluid img-responsive rounded product-image ps-3" style="height: 500px;width: 290px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
+          <div class="col-md-3" style="box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);margin-left: 7px;">
+              {% if book and book.thumbnail_url != None and book.thumbnail_url != '' %}
+                <img style="min-height: 500px;width: 310px;" src="{{ url_for('static', filename = 'files_uploaded/' + book.thumbnail_url) }}" alt="{{book.title}}" />
               {% else %}
-                <img class="img-fluid img-responsive rounded product-image ps-3" style="height: 500px;width: 290px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
+                <img style="min-height: 500px;width: 310px;" src="{{ url_for('static', filename = 'admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
               {% endif %}
           </div>
           <div class="col-md-6" style="box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);margin-left: 12px;">

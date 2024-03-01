@@ -11,7 +11,7 @@ $(document).ready(function(){
             responses.forEach(element => {
                 var cat_item_html_tmp = cat_item_html;
                 cat_item_html_tmp = cat_item_html_tmp.replaceAll("@@category.id@@", element.id)
-                                                    .replaceAll("@@category.thumbnail@@", element.thumbnail)
+                                                    .replaceAll("@@category.thumbnail_url@@", element.thumbnail_url)
                                                     .replaceAll("@@category.name@@", element.name)
                                                     .replaceAll("@@category.short_description@@", element.short_description)
 

@@ -1,7 +1,9 @@
+import os
+import uuid
 from flask import Request
-
 from app.website.models.validations.book_validation import BookCreateForm
 from app.website.models.validations.category_validation import CategoryCreateForm
+from app.website.utilities.extensions import allowed_file, upload_file
 from ..models.book import Book
 from ..models.book_category import Category
 from datetime import datetime
@@ -45,8 +47,9 @@ def create(form:BookCreateForm, request:Request):
 
     if 'file[0]' in request.files:
         uploaded_file = request.files['file[0]']
-        if uploaded_file.filename != '':
-                new_book.thumbnail = base64.b64encode(uploaded_file.read())
+        if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
+                file_name = upload_file(uploaded_file)
+                new_book.thumbnail_url = file_name
     
     db_context.session.add(new_book)
     db_context.session.commit()
@@ -61,8 +64,9 @@ def edit(book_to_edit:Book, request:Request):
 
     if 'file[0]' in request.files:
             uploaded_file = request.files['file[0]']
-            if uploaded_file.filename != '':
-                book_to_edit.thumbnail = base64.b64encode(uploaded_file.read())
+            if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
+                file_name = upload_file(uploaded_file)
+                book_to_edit.thumbnail_url = file_name
 
     book_to_edit.title = request.form.get('title')
     book_to_edit.slug = slugify(book_to_edit.title)
@@ -123,8 +127,9 @@ def create_category(form:CategoryCreateForm, request:Request):
 
     if 'file[0]' in request.files:
         uploaded_file = request.files['file[0]']
-        if uploaded_file.filename != '':
-                new_category.thumbnail = base64.b64encode(uploaded_file.read())
+        if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
+                file_name = upload_file(uploaded_file)
+                new_category.thumbnail_url = file_name
     
     db_context.session.add(new_category)
     db_context.session.commit()
@@ -135,8 +140,9 @@ def edit_category(category_to_edit:Category, request:Request):
     """
     if 'file[0]' in request.files:
             uploaded_file = request.files['file[0]']
-            if uploaded_file.filename != '':
-                category_to_edit.thumbnail = base64.b64encode(uploaded_file.read())
+            if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
+                file_name = upload_file(uploaded_file)
+                category_to_edit.thumbnail_url = file_name
     category_to_edit.name = request.form.get('name')
     category_to_edit.slug = slugify(category_to_edit.name)
     category_to_edit.short_description = request.form.get('short_description')
