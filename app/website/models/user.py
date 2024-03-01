@@ -9,7 +9,7 @@ class User(db_context.Model, UserMixin):
     first_name = db_context.Column(db_context.NVARCHAR(150), nullable=False)
     last_name = db_context.Column(db_context.NVARCHAR(150), nullable=False)
     date_of_birth = db_context.Column(db_context.DateTime(timezone=True))
-    photo = db_context.Column(db_context.Text)
+    photo_url = db_context.Column(db_context.Text)
     telephone = db_context.Column(db_context.String(20))
     address = db_context.Column(db_context.NVARCHAR(500))
     experience_in = db_context.Column(db_context.NVARCHAR)

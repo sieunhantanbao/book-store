@@ -25,8 +25,8 @@
                           {% endif %}
                           <div class="col-md-3 mt-1">
                             <a href="/book/detail/{{book.slug}}">
-                              {% if book.thumbnail != None and book.thumbnail != '' %}
-                                <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="data:image/gif;base64, {{book.thumbnail}}" alt="{{book.title}}" />
+                              {% if book.thumbnail_url != None and book.thumbnail_url != '' %}
+                                <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = 'files_uploaded/'+ book.thumbnail_url ) }}" alt="{{book.title}}" />
                               {% else %}
                                 <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
                               {% endif %}

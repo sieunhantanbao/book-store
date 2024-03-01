@@ -12,10 +12,10 @@
     <div class="nav-item text-nowrap">
       <div class="dropdown">
           <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            {% if user.photo != None and user.photo !='' %}
-            <img src="data:image/gif;base64, {{ user.photo.decode('utf-8') }}" height="32" width="32" class="rounded-circle me-2" alt="{{ user.email }}">
+            {% if user.photo_url != None and user.photo_url !='' %}
+            <img src="{{ url_for('static', filename = 'files_uploaded/' + user.photo_url) }}" height="32" width="32" class="rounded-circle me-2" alt="{{ user.email }}">
             {% else %}
-              <img src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" height="32" width="32" class="rounded-circle me-2" alt="{{ user.email }}">
+              <img src="{{ url_for('static', filename = 'admin/dist/img/no-image.png') }}" height="32" width="32" class="rounded-circle me-2" alt="{{ user.email }}">
             {% endif %}
             <strong>{{ user.first_name }} {{ user.last_name }}</strong>
           </a>

@@ -44,10 +44,10 @@
                             {% for book in books %}
                                 <tr>
                                     <td>
-                                        {% if book.thumbnail != None and book.thumbnail != '' %}
-                                                <img src="data:image/png;base64, {{ book.thumbnail }}" alt="{{ book.title }}" style="height: 60px; width:60px;" />
+                                        {% if book.thumbnail_url != None and book.thumbnail_url != '' %}
+                                                <img src="{{ url_for('static', filename = 'files_uploaded/'+ book.thumbnail_url ) }}" alt="{{ book.title }}" style="height: 60px; width:60px;" />
                                         {% else %}
-                                            <img src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{ book.title }}" style="height: 60px; width:60px;" />
+                                            <img src="{{ url_for('static', filename = 'admin/dist/img/no-image.png') }}" alt="{{ book.title }}" style="height: 60px; width:60px;" />
                                         {% endif %}
                                     </td>
                                     <td> 

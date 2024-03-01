@@ -43,10 +43,10 @@
                             {% for user in users %}
                                 <tr>
                                     <td>
-                                        {% if user.photo != None and user.photo != '' %}
-                                                <img src="data:image/png;base64, {{ user.photo }}" alt="{{ user.email }}" style="height: 60px; width:60px;" />
+                                        {% if user.photo_url != None and user.photo_url != '' %}
+                                                <img src="{{ url_for('static', filename = 'files_uploaded/' + user.photo_url) }}" alt="{{ user.email }}" style="height: 60px; width:60px;" />
                                         {% else %}
-                                            <img src="{{ url_for('static', filename = '/admin/dist/img/no-image.png') }}" alt="{{ user.title }}" style="height: 60px; width:60px;" />
+                                            <img src="{{ url_for('static', filename = 'admin/dist/img/no-image.png') }}" alt="{{ user.title }}" style="height: 60px; width:60px;" />
                                         {% endif %}
                                     </td>
                                     <td> 

@@ -5,7 +5,7 @@ class Category(db_context.Model):
     name = db_context.Column(db_context.NVARCHAR(1000), nullable=False)
     slug = db_context.Column(db_context.String(1000), nullable=False)
     short_description = db_context.Column(db_context.NVARCHAR(1000))
-    thumbnail = db_context.Column(db_context.Text)
+    thumbnail_url = db_context.Column(db_context.Text)
     sort_order = db_context.Column(db_context.Integer)
     created_at = db_context.Column(db_context.DateTime(timezone = True), nullable=False, default = datetime.now())
     updated_at = db_context.Column(db_context.DateTime(timezone = True), default = None)

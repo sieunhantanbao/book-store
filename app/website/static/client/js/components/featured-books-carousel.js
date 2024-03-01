@@ -15,14 +15,14 @@ $(document).ready(function(){
 
                 var style = `<style>
                                 .carousel-item:nth-child(@@index@@) {
-                                background-image: url('data:image/gif;base64, @@featured_book.thumbnail@@');
+                                background-image: url('/static/files_uploaded/@@featured_book.thumbnail_url@@');
                                 background-repeat: no-repeat;
                                 background-size: cover;
                                 background-position: center center;
                                 }
                             </style>`;
                 style = style.replaceAll("@@index@@", new_index)
-                             .replaceAll("@@featured_book.thumbnail@@", element.thumbnail);
+                             .replaceAll("@@featured_book.thumbnail_url@@", element.thumbnail_url);
                 featured_books_carousel_img_bg.append(style);
 
 
