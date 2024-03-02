@@ -15,11 +15,11 @@ def get_rating_value_by_book_user(user_id, book_id):
     """
     return Rating.query.filter_by(user_id=user_id, book_id=book_id, is_reviewed=True).first()
 
-def get_all_average_rating():
+def get_all_average_rating(book_ids:list):
     """
     Get average book ratings
     """
-    average_ratings = db_context.session.query(Rating.book_id, func.avg(Rating.rating_value).label('average_rating_value'), func.count(Rating.book_id).label('total_ratings')).group_by(Rating.book_id).filter_by(is_reviewed=True).all()
+    average_ratings = db_context.session.query(Rating.book_id, func.avg(Rating.rating_value).label('average_rating_value'), func.count(Rating.book_id).label('total_ratings')).group_by(Rating.book_id).filter(Rating.book_id.in_(book_ids), Rating.is_reviewed).all()
     return average_ratings
 
 def get_average_rating_value_by_book(book_id):

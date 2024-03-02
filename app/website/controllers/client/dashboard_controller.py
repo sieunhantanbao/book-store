@@ -1,16 +1,16 @@
 from flask import Blueprint, render_template
-from flask_login import login_required, current_user
+from flask_login import current_user
 from ...services import book_client_service as _book_service, rating_client_service as _rating_service, wishlist_service as _wishlist_service
 dashboard = Blueprint('dashboard', __name__)
 
 @dashboard.route('/')
-#@login_required
 def home():
     """
     Dashboard page
     """
     books = _book_service.get_all()
-    book_average_ratings = _rating_service.get_all_average_rating()
+    book_ids = [book.id for book in books]
+    book_average_ratings = _rating_service.get_all_average_rating(book_ids)
     for book in books:
         average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
         if average_rating:
@@ -27,10 +27,8 @@ def home():
         return render_template('client/index.html',
                             books = books,
                             wishlists = wishlists,
-                            book_average_ratings = book_average_ratings,
                             user = current_user)
     else:
         return render_template('client/index.html',
                             books = books,
-                            book_average_ratings = book_average_ratings,
                             user = None)
