@@ -50,7 +50,7 @@
                               </a>
                             </div>
                             <div class="col-md-6 mt-1">
-                                <h5 class="text-truncate">{{book.title}}</h5>
+                                <h5 class="text-truncate"><a href="/book/detail/{{book.slug}}" class="text-decoration-none text-dark">{{book.title}}</a></h5>
                                 <div class="d-flex flex-row">
                                     <div class="ratings mr-2">
                                       {{ star_rating.rating(book.id, book.total_ratings, book.average_rating_value) }}

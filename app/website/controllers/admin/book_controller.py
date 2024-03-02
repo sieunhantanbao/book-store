@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, redirect, request, url_for, jsonify, make_response
 from flask_login import login_required, current_user
+from app.website.models.constants.constants import REDIS_KEY_CLIENT_LIST_ALL_BOOKS, REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS
+
+from app.website.utilities.extensions import clear_redis_cache
 from ...services import book_service as _book_service
 from ...models.validations.book_validation import BookCreateForm
 
@@ -31,6 +34,8 @@ def create():
         if request.method == "POST" and form.validate():
             publish_date = request.form.get('publish_date')
             _book_service.create(form, request)
+            cache_keys = [REDIS_KEY_CLIENT_LIST_ALL_BOOKS, REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS]
+            clear_redis_cache(cache_keys)
             return redirect(url_for('book_controller.list')) # seem like this does not affect, the redirect is implemented from the JS (book_create.html)
         return render_template('admin/book_create.html', form=form, publish_date = publish_date, categories = categories, user=current_user)
     return redirect(url_for('auth.login'))
@@ -51,6 +56,8 @@ def edit(book_id):
         elif request.method == "POST":
             if book_to_edit:
                 _book_service.edit(book_to_edit, request)
+                cache_keys = [REDIS_KEY_CLIENT_LIST_ALL_BOOKS, REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS]
+                clear_redis_cache(cache_keys)
             else:
                 # Error - no book found
                 return render_template('admin/book_edit.html', book = book_to_edit, categories=categories, user = current_user)
@@ -67,5 +74,7 @@ def publish(book_id, action):
     if current_user.is_authenticated:
         book_to_publish = _book_service.get_by_id(book_id)
         _book_service.publish(book_to_publish, action)
+        cache_keys = [REDIS_KEY_CLIENT_LIST_ALL_BOOKS, REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS]
+        clear_redis_cache(cache_keys)
         return make_response(jsonify(message="Success published/unpublished"), 200)
     return make_response(jsonify(message="You are not authorized to perform this action."), 401)

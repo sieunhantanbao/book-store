@@ -2,6 +2,8 @@ from cgi import FieldStorage
 import os
 from werkzeug.utils import secure_filename
 import uuid
+from app import redis_client
+
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def allowed_file(filename):
@@ -14,3 +16,13 @@ def upload_file(file: FieldStorage):
     file_path = os.path.join(ROOT_DIR, os.environ['UPLOAD_FOLDER'], file_name)
     file.save(file_path)
     return file_name
+
+def clear_redis_cache(cache_keys: list):
+    try:
+        for key in cache_keys:
+            if redis_client.exists(key):
+                redis_client.delete(key)
+    except Exception as e:
+        print(e)
+    
+        
