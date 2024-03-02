@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, redirect, request, url_for, jsonify, make_response
 from flask_login import login_required, current_user
+from app.website.models.constants.constants import REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES, REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES
+
+from app.website.utilities.extensions import clear_redis_cache
 from ...services import book_service as _book_service
 from ...models.validations.category_validation import CategoryCreateForm
 
@@ -27,6 +30,8 @@ def create():
         form = CategoryCreateForm(request.form)
         if request.method == "POST" and form.validate():
             _book_service.create_category(form, request)
+            cache_keys = [REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES, REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES]
+            clear_redis_cache(cache_keys)
             return redirect(url_for('category_controller.list'))
         return render_template('admin/category_create.html', form=form, user=current_user)
     return redirect(url_for('auth.login'))
@@ -46,6 +51,8 @@ def edit_category(cat_id):
         elif request.method == "POST":
             if category_to_edit:
                 _book_service.edit_category(category_to_edit, request)
+                cache_keys = [REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES, REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES]
+                clear_redis_cache(cache_keys)
             else:
                 # Error - no category found
                 return render_template('admin/category_edit.html', category = category_to_edit, user = current_user)

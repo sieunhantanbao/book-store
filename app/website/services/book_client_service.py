@@ -1,3 +1,4 @@
+from sqlalchemy import desc
 from ..models.book import Book
 from ..models.book_category import Category
 from ..models.wishlist import WishList
@@ -32,10 +33,10 @@ def get_book_wishlists(user_id):
     """
     return db_context.session.query(Book, WishList).join(WishList).filter(WishList.user_id==user_id, Book.id==WishList.book_id).all()
 
-def get_featured():
+def get_featured(size: int):
     """
-    Get all featured books
+    Get featured books by size
     """
-    books = Book.query.filter_by(is_published=True, is_featured=True).all()
+    books = Book.query.filter_by(is_published=True, is_featured=True).order_by(desc(Book.created_at)).limit(size).all()
     return books
 
