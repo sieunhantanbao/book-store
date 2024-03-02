@@ -65,7 +65,6 @@ def my_book_wishlists():
     return render_template('client/wishlist.html', books = books ,user = current_user)
 
 @book.route('/categories/all', methods = ['GET'])
-@login_required
 def all_categories():
     """
     Get all book categories
