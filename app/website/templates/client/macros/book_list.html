@@ -1,0 +1,68 @@
+{% macro book_list(books, star_rating, wishlists, title) -%}
+<div class="card">
+    <div class="card-header text-black fw-bold"><i class="fas fa-book fa-2xl"></i> {{title}}</div>
+    <div class="card-body">
+        <div class="row">
+            {% if books != None %}
+              {% for book in books if books %}
+              <div class="col-md-6">
+                  <div class="row p-2 bg-white border rounded mt-2 position-relative" style="margin-right:1px;height:200px;">
+                    {% if book.is_featured %}
+                      <div class="ribbon-wrapper ribbon-lg">
+                        <div class="ribbon text-white" style="background-color:red;">
+                          Featured
+                        </div>
+                      </div>
+                    {% endif %}
+                    <div class="col-md-3 mt-1">
+                      <a href="/book/detail/{{book.slug}}">
+                        {% if book.thumbnail_url != None and book.thumbnail_url != '' %}
+                          <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = 'files_uploaded/'+ book.thumbnail_url ) }}" alt="{{book.title}}" />
+                        {% else %}
+                          <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = 'admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
+                        {% endif %}
+                      </a>
+                    </div>
+                    <div class="col-md-6 mt-1">
+                        <h5 class="text-truncate"><a href="/book/detail/{{book.slug}}" class="text-decoration-none text-dark">{{book.title}}</a></h5>
+                        <div class="d-flex flex-row">
+                            <div class="ratings mr-2">
+                              {{ star_rating.rating(book.id, book.total_ratings, book.average_rating_value) }}
+                            </div>
+                        </div>
+                        <div class="mt-1 mb-1">
+                          <i class="fas fa-user text-success"></i> <span> {{book.author}}</span>
+                          <i class="fas fa-book text-success"></i> </span><span> {{book.isbn}}</span>
+                          <i class="fas fa-newspaper text-success"></i> <span> {{book.publisher}}<br></span>
+                        </div>
+                        <div class="mt-1 mb-1">
+                          <span>{{book.dimession}}</span>
+                          <i class="fas fa-language text-success"></i> <span> {{book.language}}</span>
+                          <i class="fas fa-calendar text-success"></i> <span> {{book.publish_date.strftime('%m/%d/%Y')}}<br></span>
+                        </div>
+                        <p class="text-justify text-truncate para mb-0">{{book.short_description}}<br><br></p>
+                    </div>
+                    <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                        <div class="d-flex flex-row align-items-center">
+                            <h4 class="mr-1">{{"${:,}".format(book.price)}}</h4>
+                        </div>
+                        <h6 class="text-success">Free shipping</h6>
+                        <div class="d-flex flex-column mt-4">
+                          <br/>
+                          <a class="btn btn-primary btn-sm" href="/book/detail/{{book.slug}}">Details</a>
+                          {% if not book.id in wishlists %}
+                            <button class="btn btn-outline-success btn-sm mt-2 add-to-wishlist" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
+                          {% else %}
+                            <button class="btn btn-danger btn-sm mt-2 add-to-wishlist disabled" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
+                          {% endif %}
+                        </div>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+            {% endif %}
+        </div> <!-- Row -->
+    </div> <!-- Card body -->
+  </div> <!-- Card -->
+  {{ star_rating.rating_detail_popover() }}
+{%- endmacro %}

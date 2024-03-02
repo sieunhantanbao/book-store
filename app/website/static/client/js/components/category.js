@@ -10,7 +10,7 @@ $(document).ready(function(){
             var cat_items = $(".category-items");
             responses.forEach(element => {
                 var cat_item_html_tmp = cat_item_html;
-                cat_item_html_tmp = cat_item_html_tmp.replaceAll("@@category.id@@", element.id)
+                cat_item_html_tmp = cat_item_html_tmp.replaceAll("@@category.slug@@", element.slug)
                                                     .replaceAll("@@category.thumbnail_url@@", element.thumbnail_url)
                                                     .replaceAll("@@category.name@@", element.name)
                                                     .replaceAll("@@category.short_description@@", element.short_description)

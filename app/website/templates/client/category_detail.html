@@ -1,0 +1,34 @@
+{% extends "common/layout.html" %} 
+{% import "common/macros/star_rating.html" as star_rating %}
+{% import "client/macros/book_list.html" as book %}
+
+{% block style %}
+<link href="{{ url_for('static', filename = '/client/css/pages/star_rating.css') }}" rel="stylesheet">
+<style>
+  .category-banner {
+    max-height:800px;
+    width:100%;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="mt-0 mb-5">
+    <div class="d-flex justify-content-center row">
+      <div class="col-md-12">
+          <img src="{{ url_for('static', filename='files_uploaded/' + category.thumbnail_url)}}" class="img-fluid img-responsive category-banner" />
+      </div> <!-- col-md-12 -->
+      <div class="col-md-12">
+        <br/>
+      </div>
+      <div class="col-md-12">
+        {{ book.book_list(books, star_rating, wishlists, 'BOOKS IN THIS CATEGORY') }}
+      </div>
+    </div> <!-- d-flex justify-content-center row -->
+  </div> <!-- mt-5 mb-5 -->  
+{% endblock %}
+
+{% block script %}
+  <script src="{{ url_for('static', filename= '/client/js/pages/star_rating.js')}} "></script>
+  <script src="{{ url_for('static', filename= '/client/js/pages/wishlist.js')}} "></script>
+{% endblock %}

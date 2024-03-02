@@ -50,9 +50,9 @@ def my_book_wishlists():
     Get all my wishlist
     """
     results = _book_service.get_book_wishlists(current_user.id)
-    book_average_ratings = _rating_service.get_all_average_rating()
-    
     books = [result.Book for result in results]
+    book_ids = [book.id for book in books]
+    book_average_ratings = _rating_service.get_all_average_rating(book_ids)
     for book in books:
         average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
         if average_rating:
@@ -69,9 +69,43 @@ def all_categories():
     """
     Get all book categories
     """        
-    return render_template('client/category.html',user = current_user)
+    return render_template('client/category.html', user = current_user)
 
-
+@book.route('/categories/<id_or_slug>', methods = ['GET'])
+def category_detail(id_or_slug):
+    """
+    Get the category detail by id or slug
+    """
+    category = _book_service.get_category_by_id(id_or_slug)
+    if not category:
+        abort(404)
+        
+    books = _book_service.get_by_cat(category.id)
+    book_ids = [book.id for book in books]
+    book_average_ratings = _rating_service.get_all_average_rating(book_ids)
+    for book in books:
+        average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
+        if average_rating:
+            book.average_rating_value = average_rating[0].average_rating_value
+            book.total_ratings = average_rating[0].total_ratings
+        else:
+            book.average_rating_value = None
+            book.total_ratings = None
+    
+    if current_user!= None and current_user.is_authenticated:
+        wishlists = _wishlist_service.get_all(current_user.id)
+        if wishlists:
+            wishlists = [wishlist.book_id for wishlist in wishlists]
+        return render_template('client/category_detail.html',
+                            category = category,
+                            books = books,
+                            wishlists = wishlists,
+                            user = current_user)
+    else:
+        return render_template('client/category_detail.html',
+                            category = category,
+                            books = books,
+                            user = None)
 ############### APIs ##################################
 @book.route('/api/add-wishlist', methods=['POST'])
 @login_required
