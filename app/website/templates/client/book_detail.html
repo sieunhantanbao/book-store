@@ -24,7 +24,8 @@
                 {% for image in book.images %}
                   {% if loop.index > 1 and image.url != None and image.url != '' %}
                     <div class="col-md-4 image-container">
-                      <img style="height: 80px;width: 90px;" class="img img-fluid mt-2 border border-4 rounded-circle zoom-img" src="{{ url_for('static', filename = 'files_uploaded/' + image.url) }}" alt="{{book.title}}" />
+                      <img style="height: 80px;width: 90px;" class="img img-fluid mt-2 border border-4 rounded-circle" src="{{ url_for('static', filename = 'files_uploaded/' + image.url) }}" alt="{{book.title}}" />
+                      <img style="height:0px;width:0px;" class="zoom-img float-end" src="{{ url_for('static', filename = 'files_uploaded/' + image.url) }}" alt="{{book.title}}" />
                     </div>
                   {% endif %}
                 {% endfor %}
@@ -150,7 +151,7 @@
                 <section class="content-item" id="comments">
                 <div class="container">   
                   <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-12 col-md-12">
                           <h3>Comments (<span class="text-danger fw-bold">{{(book_comments | length) if book_comments else 0}}</span>)</h3> 
                            {% for book_comment in book_comments or [] %}
                                 <div class="media">

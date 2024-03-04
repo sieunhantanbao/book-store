@@ -15,6 +15,7 @@
 	width: 500px !important;
 	height: 500px !important;
 	border-radius: 0px !important;
+	display: block;
 }
 
 .customer-review-box {
