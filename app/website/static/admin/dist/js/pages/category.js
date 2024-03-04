@@ -23,7 +23,7 @@
         acceptedFiles: 'image/*', // Allow only image files
         addRemoveLinks: true, // Add remove links to uploaded files
         parallelUploads: 100,
-        maxFiles: 1,
+        maxFiles: 5,
         // The setting up of the dropzone
         init: function() {
             var myDropzone = this;
@@ -82,7 +82,7 @@
       acceptedFiles: 'image/*', // Allow only image files
       addRemoveLinks: true, // Add remove links to uploaded files
       parallelUploads: 100,
-      maxFiles: 1,
+      maxFiles: 5,
       // The setting up of the dropzone
       init: function() {
           var myDropzone = this;

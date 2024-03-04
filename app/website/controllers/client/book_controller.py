@@ -189,6 +189,8 @@ def get_categories():
         serialized_categories_cached = redis_client.get(constants.REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES)
         if serialized_categories_cached == None:
             categories = _book_service.get_all_categories(constants.NUMBER_OF_CATEGORIES_ON_HOME_PAGE)
+            for category in categories:
+                category.thumbnail_url = category.images[0].url if category.images[0] !=None else None
             categories_dic = [category.as_dict() for category in categories]
             serialized_categories_list = json.dumps(categories_dic)
             redis_client.set(constants.REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES, serialized_categories_list)
@@ -198,6 +200,8 @@ def get_categories():
         serialized_categories_cached = redis_client.get(constants.REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES)
         if serialized_categories_cached == None:
             categories = _book_service.get_all_categories()
+            for category in categories:
+                category.thumbnail_url = category.images[0].url if category.images[0] !=None else None
             categories_dic = [category.as_dict() for category in categories]
             serialized_categories_list = json.dumps(categories_dic)
             redis_client.set(constants.REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES, serialized_categories_list)
@@ -214,6 +218,8 @@ def get_featured_books():
     serialized_featured_books_cached = redis_client.get(constants.REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS)
     if serialized_featured_books_cached == None:
         featured_books = _book_service.get_featured(constants.NUMBER_OF_FEATURED_CAROUSEL)
+        for featured_book in featured_books:
+            featured_book.thumbnail_url = featured_book.images[0].url if featured_book.images[0] !=None else None
         featured_books_dic = [book.as_dict() for book in featured_books]
         serialized_featured_books_list = json.dumps(featured_books_dic)
         redis_client.set(constants.REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS, serialized_featured_books_list)

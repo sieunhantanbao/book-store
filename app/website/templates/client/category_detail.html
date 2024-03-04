@@ -16,13 +16,15 @@
   <div class="mt-0 mb-5">
     <div class="d-flex justify-content-center row">
       <div class="col-md-12">
-          <img src="{{ url_for('static', filename='files_uploaded/' + category.thumbnail_url)}}" class="img-fluid img-responsive category-banner" />
+        {% if category.images[0] != None and category.images[0].url != None and category.images[0].url != '' %}
+          <img src="{{ url_for('static', filename='files_uploaded/' + category.images[0].url)}}" class="img-fluid img-responsive category-banner" />
+        {% endif %}
       </div> <!-- col-md-12 -->
       <div class="col-md-12">
         <br/>
       </div>
       <div class="col-md-12">
-        {{ book.book_list(books, star_rating, wishlists, 'BOOKS IN THIS CATEGORY') }}
+        {{ book.book_list(books, star_rating, wishlists, 'BOOKS IN THIS CATEGORY', True) }}
       </div>
     </div> <!-- d-flex justify-content-center row -->
   </div> <!-- mt-5 mb-5 -->  

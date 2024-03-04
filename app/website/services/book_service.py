@@ -1,13 +1,11 @@
-import os
-import uuid
 from flask import Request
 from app.website.models.validations.book_validation import BookCreateForm
 from app.website.models.validations.category_validation import CategoryCreateForm
 from app.website.utilities.extensions import allowed_file, upload_file
 from ..models.book import Book
+from ..models.image import Image
 from ..models.book_category import Category
 from datetime import datetime
-import base64
 from slugify import slugify
 from ... import db_context
 
@@ -45,11 +43,12 @@ def create(form:BookCreateForm, request:Request):
     if publish_date != None and publish_date !='':
         new_book.publish_date = datetime.strptime(publish_date, '%m/%d/%Y')
 
-    if 'file[0]' in request.files:
-        uploaded_file = request.files['file[0]']
+    for file in request.files:
+        uploaded_file = request.files[file]
         if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
-                file_name = upload_file(uploaded_file)
-                new_book.thumbnail_url = file_name
+            file_name = upload_file(uploaded_file)
+            image = Image(url = file_name)
+            new_book.images.append(image)
     
     db_context.session.add(new_book)
     db_context.session.commit()
@@ -61,12 +60,13 @@ def edit(book_to_edit:Book, request:Request):
     publish_date = request.form.get('publish_date')
     if publish_date != None and publish_date !='':
             book_to_edit.publish_date = datetime.strptime(publish_date, '%m/%d/%Y')
-
-    if 'file[0]' in request.files:
-            uploaded_file = request.files['file[0]']
-            if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
-                file_name = upload_file(uploaded_file)
-                book_to_edit.thumbnail_url = file_name
+    
+    for file in request.files:
+        uploaded_file = request.files[file]
+        if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
+            file_name = upload_file(uploaded_file)
+            image = Image(url = file_name)
+            book_to_edit.images.append(image)
 
     book_to_edit.title = request.form.get('title')
     book_to_edit.slug = slugify(book_to_edit.title)
@@ -124,12 +124,12 @@ def create_category(form:CategoryCreateForm, request:Request):
                     short_description = form.short_description.data,
                     slug = slugify(form.name.data),
                     created_at = datetime.now())
-
-    if 'file[0]' in request.files:
-        uploaded_file = request.files['file[0]']
+    for file in request.files:
+        uploaded_file = request.files[file]
         if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
-                file_name = upload_file(uploaded_file)
-                new_category.thumbnail_url = file_name
+            file_name = upload_file(uploaded_file)
+            image = Image(url = file_name)
+            new_category.images.append(image)
     
     db_context.session.add(new_category)
     db_context.session.commit()
@@ -138,11 +138,13 @@ def edit_category(category_to_edit:Category, request:Request):
     """
     Edit a Category
     """
-    if 'file[0]' in request.files:
-            uploaded_file = request.files['file[0]']
-            if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
-                file_name = upload_file(uploaded_file)
-                category_to_edit.thumbnail_url = file_name
+    for file in request.files:
+        uploaded_file = request.files[file]
+        if uploaded_file.filename != '' and allowed_file(uploaded_file.filename):
+            file_name = upload_file(uploaded_file)
+            image = Image(url = file_name)
+            category_to_edit.images.append(image)
+
     category_to_edit.name = request.form.get('name')
     category_to_edit.slug = slugify(category_to_edit.name)
     category_to_edit.short_description = request.form.get('short_description')

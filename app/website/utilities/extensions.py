@@ -17,6 +17,11 @@ def upload_file(file: FieldStorage):
     file.save(file_path)
     return file_name
 
+def remove_file(file_name: str):
+    file_path = os.path.join(ROOT_DIR, os.environ['UPLOAD_FOLDER'], file_name)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+
 def clear_redis_cache(cache_keys: list):
     try:
         for key in cache_keys:

@@ -22,7 +22,8 @@ class Book(db_context.Model):
     created_at = db_context.Column(db_context.DateTime(timezone = True), nullable=False)
     updated_at = db_context.Column(db_context.DateTime(timezone = True), default = None)
     category_id = db_context.Column(db_context.Integer, db_context.ForeignKey('category.id'), nullable=False)
-    ratings = db_context.relationship('Rating', backref='book', lazy=True)
+    ratings = db_context.relationship('Rating', backref='book', lazy = False)
+    images = db_context.relationship('Image', backref='book', lazy = False)
     
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}

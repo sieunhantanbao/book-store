@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template
 from flask_login import current_user
+
+from app.website.models.constants.constants import NUMBER_OF_BOOKS_HOME_PAGE
 from ...services import book_client_service as _book_service, rating_client_service as _rating_service, wishlist_service as _wishlist_service
 dashboard = Blueprint('dashboard', __name__)
 
@@ -8,7 +10,7 @@ def home():
     """
     Dashboard page
     """
-    books = _book_service.get_all()
+    books = _book_service.get_all(NUMBER_OF_BOOKS_HOME_PAGE)
     book_ids = [book.id for book in books]
     book_average_ratings = _rating_service.get_all_average_rating(book_ids)
     for book in books:

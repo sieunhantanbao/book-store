@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, redirect, request, url_for, jsonif
 from flask_login import login_required, current_user
 from app.website.models.constants.constants import REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES, REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES
 
-from app.website.utilities.extensions import clear_redis_cache
+from app.website.utilities.extensions import clear_redis_cache, remove_file
 from ...services import book_service as _book_service
+from ...services import image_service as _image_service
 from ...models.validations.category_validation import CategoryCreateForm
 
 admin_category = Blueprint('category_controller', __name__)
@@ -58,3 +59,21 @@ def edit_category(cat_id):
                 return render_template('admin/category_edit.html', category = category_to_edit, user = current_user)
         return redirect(url_for('category_controller.list'))
     return redirect(url_for('auth.login'))
+
+
+@admin_category.route('/api/image/remove/<image_id>', methods=['DELETE'])
+@login_required
+def delete_image(image_id):
+    """
+    Delete an Image by Id
+    """
+    if current_user and current_user.is_authenticated:
+        result, file_name = _image_service.delete(image_id)
+        if result:
+            # Remove the physical file
+            remove_file(file_name)
+            return make_response(jsonify(success=result), 200)
+        else:
+            return make_response(jsonify(success=result), 500)
+    else:
+        return make_response(jsonify(success=False), 401)

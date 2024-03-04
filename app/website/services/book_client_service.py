@@ -18,6 +18,13 @@ def get_all():
     books = Book.query.filter_by(is_published=True).all()
     return books
 
+def get_all(size: int):
+    """
+    Get a number of the books
+    """
+    books = Book.query.filter_by(is_published=True).order_by(desc(Book.created_at)).limit(size).all()
+    return books
+
 def get_by_cat(cat_id: int):
     """
     Get all books by the Category

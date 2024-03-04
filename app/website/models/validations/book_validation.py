@@ -11,6 +11,6 @@ class BookCreateForm(Form):
     pages = IntegerField('Total pages', [validators.NumberRange(min=0)])
     dimensions = StringField('Dimensions', [])
     language = StringField('Language', [])
-    thumbnail = StringField('Thumbnail', [])
+    thumbnail_url = StringField('Thumbnail', [])
     is_featured = BooleanField('Is featured', [])
     category_id = IntegerField('Category', [validators.NumberRange(min=0)])
