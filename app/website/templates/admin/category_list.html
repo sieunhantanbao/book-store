@@ -39,8 +39,8 @@
                             {% for category in categories %}
                                 <tr>
                                     <td>
-                                        {% if category.thumbnail_url != None and category.thumbnail_url != '' %}
-                                            <img src="{{ url_for('static', filename = 'files_uploaded/'+ category.thumbnail_url ) }}" alt="{{ category.name }}" style="height: 60px; width:60px;" />
+                                        {% if category.images[0] != None and category.images[0].url != None and category.images[0].url != '' %}
+                                            <img src="{{ url_for('static', filename = 'files_uploaded/'+ category.images[0].url ) }}" alt="{{ category.name }}" style="height: 60px; width:60px;" />
                                         {% else %}
                                             <img src="{{ url_for('static', filename = 'admin/dist/img/no-image.png') }}" alt="{{ category.name }}" style="height: 60px; width:60px;" />
                                         {% endif %}

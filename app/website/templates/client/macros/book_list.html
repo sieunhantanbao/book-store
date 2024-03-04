@@ -1,4 +1,4 @@
-{% macro book_list(books, star_rating, wishlists, title) -%}
+{% macro book_list(books, star_rating, wishlists, title, all) -%}
 <div class="card">
     <div class="card-header text-black fw-bold"><i class="fas fa-book fa-2xl"></i> {{title}}</div>
     <div class="card-body">
@@ -16,8 +16,8 @@
                     {% endif %}
                     <div class="col-md-3 mt-1">
                       <a href="/book/detail/{{book.slug}}">
-                        {% if book.thumbnail_url != None and book.thumbnail_url != '' %}
-                          <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = 'files_uploaded/'+ book.thumbnail_url ) }}" alt="{{book.title}}" />
+                        {% if book.images[0] != None and book.images[0].url !=None and book.images[0].url != '' %}
+                          <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = 'files_uploaded/'+ book.images[0].url ) }}" alt="{{book.title}}" />
                         {% else %}
                           <img class="img-fluid img-responsive rounded product-image" style="height: 150px;width: 150px;" src="{{ url_for('static', filename = 'admin/dist/img/no-image.png') }}" alt="{{book.title}}" />
                         {% endif %}
@@ -63,6 +63,15 @@
             {% endif %}
         </div> <!-- Row -->
     </div> <!-- Card body -->
+    {% if all == False %}
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="/book/list-all" class="btn btn-info float-end"><small>View all</small></a>
+                    </div>
+                </div>
+            </div>
+    {% endif %}
   </div> <!-- Card -->
   {{ star_rating.rating_detail_popover() }}
 {%- endmacro %}

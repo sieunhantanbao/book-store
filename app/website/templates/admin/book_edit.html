@@ -191,10 +191,17 @@
                                 {% endif %}
                             </div>
                             <div class="form-group">
-                                <label for="dimensions">Thumbnail</label>
-                                {% if book.thumbnail_url != None and book.thumbnail_url != '' %}
-                                    <img src="{{ url_for('static', filename = 'files_uploaded/' + book.thumbnail_url) }}" alt="{{ book.title }}" style="height: 60px; width:60px;" />
-                                {% endif %}
+                                <label for="dimensions">Images</label>
+                                <div class="row">
+                                    {% if book.images %}
+                                        {% for image in book.images %}
+                                            <div class="col-md-2 image-item">
+                                                <img class="img-fluid" src="{{ url_for('static', filename = 'files_uploaded/' + image.url) }}" alt="{{ book.title }}" style="height: 200px; width:245px;"/>
+                                                <button data-id="{{image.id}}" class="btn btn-danger btn-image-delete">Remove</button>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
                             </div>
                             </div>
                             </div>

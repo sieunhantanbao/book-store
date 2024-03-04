@@ -59,10 +59,19 @@
                                 {% endif %}
                             </div>
                             <div class="form-group">
-                                <label for="dimensions">Thumbnail</label>
-                                {% if category.thumbnail_url != None and category.thumbnail_url != '' %}
-                                    <img src="{{ url_for('static', filename = 'files_uploaded/' + category.thumbnail_url) }}" alt="{{ category.title }}" style="height: 60px; width:60px;" />
-                                {% endif %}
+                                <label for="dimensions">Images</label>
+                                <div class="row">
+                                    {% if category.images %}
+                                        {% for image in category.images %}
+                                            {% if image.url != None and image.url != '' %}
+                                                <div class="col-md-2 image-item">
+                                                    <img class="img-fluid" src="{{ url_for('static', filename = 'files_uploaded/' + image.url) }}" alt="{{ category.title }}" style="height: 200px; width:245px;"/>
+                                                    <button data-id="{{image.id}}" class="btn btn-danger btn-image-delete">Remove</button>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
                             </div>
                             </div>
                             </div>
