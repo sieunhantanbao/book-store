@@ -95,14 +95,6 @@ def upgrade() -> None:
                 "description": "This is the category for fiction books",
                 "sort_order": 0,
                 "created_at": datetime.now()
-            },
-            {
-                "id": UUID("45BF7523-D5AB-4B93-A7F9-AF7BC5361A35"),
-                "name": "Test cat",
-                "slug": "test-cat",
-                "description": "Test cat",
-                "sort_order": 0,
-                "created_at": datetime.now()
             }
     ]
 
