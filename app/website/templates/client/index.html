@@ -6,6 +6,7 @@
 
 {% block style %} 
 <link href="{{ url_for('static', filename = '/client/css/pages/star_rating.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename = 'client/css/pages/book.css') }}" rel="stylesheet">
 <div id="featured-books-carousel-img-bg">
 </div>
 {% endblock %}
@@ -26,7 +27,7 @@
         <br/>
       </div>
       <div class="col-md-12">
-          {{ book.book_list(books, star_rating, wishlists, 'BOOKS', False) }}
+          {{ book.book_list(categories, books, star_rating, wishlists, 'BOOKS', False, request.args) }}
       </div> <!-- col-md-12 -->
     </div> <!-- d-flex justify-content-center row -->
   </div> <!-- mt-5 mb-5 -->
@@ -39,4 +40,5 @@
     <script src="{{ url_for('static', filename= '/client/js/pages/star_rating.js')}} "></script>
     <script src="{{ url_for('static', filename= '/client/js/components/category.js')}} "></script>
     <script src="{{ url_for('static', filename= '/client/js/components/featured-books-carousel.js')}} "></script>
+    <script src="{{ url_for('static', filename= '/client/js/components/book.js')}} "></script>
 {% endblock %}

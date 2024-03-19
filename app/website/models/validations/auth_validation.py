@@ -1,8 +1,11 @@
-from wtforms import Form, StringField, PasswordField, validators, DecimalField, IntegerField
+from wtforms import Form, StringField, PasswordField, validators
 from wtforms.validators import ValidationError
-from ..user import User
+from app.database import get_db_context
+from ...schemas.user import User
 from werkzeug.security import check_password_hash
 from flask_login import current_user
+
+db = next(get_db_context())
 
 class RegistrationForm(Form):
     email = StringField('Email Address', [validators.Length(min=6, max=35)])
@@ -14,7 +17,7 @@ class RegistrationForm(Form):
     first_name = StringField('First Name', [validators.DataRequired()])
     last_name = StringField('Last Name', [validators.DataRequired()])
     def validate_email(self, field):
-        user = User.query.filter_by(email=field.data).first()
+        user = db.query(User).filter_by(email=field.data).first()
         if user:
             raise ValidationError('This email is already exists')
 
@@ -23,12 +26,12 @@ class LoginForm(Form):
     password = PasswordField('Password', [validators.DataRequired()])
 
     def validate_email(self, field):
-        user = User.query.filter_by(email=field.data).first()
+        user = db.query(User).filter_by(email=field.data).first()
         if not user:
             raise ValidationError('Email is incorrect')
         
     def validate_password(self, field):
-        user = User.query.filter_by(email=self.email.data).first()
+        user = db.query(User).filter_by(email=self.email.data).first()
         if user:
             if not check_password_hash(user.password, field.data):
                 raise ValidationError('Password is incorrect')

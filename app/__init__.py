@@ -1,15 +1,16 @@
 import os
+from uuid import UUID
 from dotenv import load_dotenv
 from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_migrate import Migrate
 import redis
+
+from .database import get_db_context
+from .settings import SQLALCHEMY_DATABASE_URL
 
 # Load environment variables from .env file
 load_dotenv()
-# AQLAlchemy DB context
-db_context = SQLAlchemy()
+
 # Caching with Redis
 redis_client = redis.Redis(host=os.environ['REDIS_HOST'], port=os.environ['REDIS_PORT'], db=0)
 
@@ -17,15 +18,11 @@ def __page_not_found(e):
     return render_template('common/404.html'), 404
 
 
-
 def create_app() -> Flask:
     app = Flask(__name__, template_folder='website/templates', static_folder='website/static')
     app.config['SECRET_KEY'] = os.environ['APP_SECRET_KEY']
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
+    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URL
     
-    db_context.init_app(app)
-    migrate = Migrate(app, db_context)
-
     app.register_error_handler(404, __page_not_found)
     
     __register_blueprint(app)
@@ -57,10 +54,8 @@ def __register_login_manager(app: Flask):
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
     
-    from .website.models.user import User
-    with app.app_context():
-        db_context.create_all()
+    from .website.schemas.user import User
     
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return next(get_db_context()).query(User).get(UUID(id))

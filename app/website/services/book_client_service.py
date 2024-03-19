@@ -1,64 +1,73 @@
+from uuid import UUID
 from sqlalchemy import desc
-from ..models.book import Book
-from ..models.book_category import Category
-from ..models.wishlist import WishList
-from ... import db_context
+from sqlalchemy.orm import Session
+from ..utilities.extensions import is_valid_uuid
+from ..schemas.book import Book
+from ..schemas.category import Category
+from ..schemas.wishlist import WishList
 
-def get_by_id(id_or_slug):
-    is_id = int(id_or_slug) if id_or_slug.isdecimal() else False
+
+def get_by_id(db: Session, id_or_slug):
+    is_id = UUID(id_or_slug) if is_valid_uuid(id_or_slug) else False
     if is_id != False:
-        return Book.query.filter_by(id = is_id, is_published = True).first()
+        return db.query(Book).filter_by(id = is_id, is_published = True).first()
     else:
-        return Book.query.filter_by(slug = id_or_slug, is_published = True).first()
+        return db.query(Book).filter_by(slug = id_or_slug, is_published = True).first()
 
-def get_all():
+def get_all(db: Session):
     """
     Get all books
     """
-    books = Book.query.filter_by(is_published=True).all()
+    books = db.query(Book).filter_by(is_published=True).all()
     return books
 
-def get_all(size: int):
+def get_with_limit(db: Session, size: int):
+    """ Get all books with limit
+
+    Args:
+        db (Session): Db Context
+        size (int): Number of books
+
+    Returns:
+        _type_: _description_
     """
-    Get a number of the books
-    """
-    books = Book.query.filter_by(is_published=True).order_by(desc(Book.created_at)).limit(size).all()
+    books = db.query(Book).filter(Book.is_published==True).order_by(desc(Book.created_at)).limit(size).all()
     return books
 
-def get_by_cat(cat_id: int):
+def get_by_cat(db: Session, cat_id: UUID):
     """
     Get all books by the Category
     """
-    books = Book.query.filter(Book.is_published==True, Book.category_id==cat_id).all()
+    books = db.query(Book).filter(Book.is_published==True, Book.category_id==cat_id).all()
     return books
 
-def get_all_categories(size: int = 0):
+def get_all_categories(db: Session, size: int = 0):
     """
     Get Categories from the database
     """
     if size and size > 0:
-        return Category.query.limit(size).all()
+        return db.query(Category).limit(size).all()
     else:
-        return Category.query.all()
+        return db.query(Category).all()
     
-def get_category_by_id(id_or_slug):
-    is_id = int(id_or_slug) if id_or_slug.isdecimal() else False
+def get_category_by_id(db: Session, id_or_slug):
+    is_id = int(id_or_slug) if is_valid_uuid(id_or_slug) else False
     if is_id != False:
-        return Category.query.filter_by(id = is_id).first()
+        return db.query(Category).filter_by(id = is_id).first()
     else:
-        return Category.query.filter_by(slug = id_or_slug).first()
+        return db.query(Category).filter_by(slug = id_or_slug).first()
 
     
-def get_book_wishlists(user_id):
+def get_book_wishlists(db: Session, user_id: UUID):
     """
     Get all my book wishlist
     """
-    return db_context.session.query(Book, WishList).join(WishList).filter(WishList.user_id==user_id, Book.id==WishList.book_id).all()
+    return db.query(Book, WishList).join(WishList).filter(WishList.user_id==user_id, Book.id==WishList.book_id).all()
 
-def get_featured(size: int):
+def get_featured(db: Session, size: int):
     """
     Get featured books by size
     """
-    books = Book.query.filter_by(is_published=True, is_featured=True).order_by(desc(Book.created_at)).limit(size).all()
+    books = db.query(Book).filter(Book.is_published==True, Book.is_featured==True).order_by(desc(Book.created_at)).limit(size).all()
     return books
 

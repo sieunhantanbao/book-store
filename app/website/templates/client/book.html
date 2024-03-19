@@ -1,0 +1,25 @@
+{% extends "common/layout.html" %}
+{% import "common/macros/star_rating.html" as star_rating %}
+{% import "client/macros/book_list.html" as book %}
+
+{% block style %} 
+<link href="{{ url_for('static', filename = 'client/css/pages/star_rating.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename = 'client/css/pages/book.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <div class="mt-0 mb-5">
+    <div class="d-flex justify-content-center row">
+      <div class="col-md-12">
+          {{ book.book_list(categories, books, star_rating, wishlists, 'BOOKS', True, request.args) }}
+      </div> <!-- col-md-12 -->
+    </div> <!-- d-flex justify-content-center row -->
+  </div> <!-- mt-5 mb-5 -->
+  
+  {% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename= 'client/js/pages/wishlist.js')}} "></script>
+    <script src="{{ url_for('static', filename= 'client/js/pages/star_rating.js')}} "></script>
+    <script src="{{ url_for('static', filename= 'client/js/components/book.js')}} "></script>
+{% endblock %}

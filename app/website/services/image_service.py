@@ -1,8 +1,8 @@
-from ..models.image import Image
+from uuid import UUID
+from ..schemas.image import Image
+from sqlalchemy.orm import Session
 
-from ... import db_context
-
-def delete(id:int):
+def delete(db: Session, id:UUID):
     """
     Delete an image by Id
     Args:
@@ -12,10 +12,10 @@ def delete(id:int):
         _type_: True if success else False
     """
     try:
-        image = Image.query.get(id)
+        image = db.query(Image).get(id)
         if image:
-            db_context.session.delete(image)
-            db_context.session.commit()
+            db.delete(image)
+            db.commit()
         return True, image.url
     except Exception as e:
         print(e)
