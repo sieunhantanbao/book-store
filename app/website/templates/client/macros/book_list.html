@@ -1,7 +1,159 @@
-{% macro book_list(books, star_rating, wishlists, title, all) -%}
+{% macro book_list(categories, books, star_rating, wishlists, title, all, filters) -%}
 <div class="card">
-    <div class="card-header text-black fw-bold"><i class="fas fa-book fa-2xl"></i> {{title}}</div>
+    <div class="card-header text-black fw-bold">
+      <i class="fas fa-book fa-2xl"></i> {{title}}
+    </div>
     <div class="card-body">
+        <div class="row">
+          <div class="col-md-12 ps-0">
+            <br/>
+            <form method="GET" action="/book/list">
+              <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-1">
+                          <br/>
+                          <strong>Category</strong>
+                        </div>
+                        <div class="col-md-10">
+                          <div class="row">
+                              {% for category in categories %}
+                                <div class="col-md-2 form-check form-check-inline">
+                                  <input class="form-check-input" name="category" type="checkbox" id="cat_{{category.id}}" 
+                                    value="{{category.id}}"
+                                    {% if category.id|string in filters.getlist('category') %} checked {% endif %}
+                                  />
+                                  <label class="form-check-label" for="cat_{{category.id}}">{{category.name}}</label>
+                                </div>
+                              {% endfor %}
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row"><div class="col-md-12"><br/></div></div>
+                    
+                    <div class="row">
+                      <div class="col-md-1">
+                        <br/>
+                        <strong>Rice range</strong>
+                      </div>
+                      <div class="col-md-5">
+                        <div class="custom-wrapper">
+                          <div class="price-input-container">
+                            <div class="row">
+                              <div class="price-input  col-md-2">
+                                <div class="price-field"> 
+                                  <input type="number"
+                                    class="min-price-input"
+                                    value="{{filters.get('min_price_input') if filters.get('min_price_input') !=None else 1}}"
+                                    name="min_price_input"> 
+                                </div>
+                              </div>
+                              <div class="col-md-8">
+                              </div>
+                              <div class="price-input  col-md-2">
+                                <div class="price-field"> 
+                                  <input type="number"
+                                    class="max-price-input"
+                                    value="{{filters.get('max_price_input') if filters.get('max_price_input') !=None else 100}}"
+                                    name="max_price_input"> 
+                                </div>
+                              </div> 
+                            </div>
+                            <div class="slider-container"> 
+                              <div class="price-slider"> 
+                              </div> 
+                            </div> 
+                          </div> 
+                          <!-- Slider -->
+                          <div class="range-price-input"> 
+                            <input type="range"
+                              class="min-price"
+                              min="1"
+                              max="500"
+                              value="1"
+                              step="1"> 
+                            <input type="range"
+                              class="max-price"
+                              min="1"
+                              max="500"
+                              value="100"
+                              step="1"> 
+                          </div> 
+                        </div> 
+                      </div>
+                      <div class="col-md-1">
+                        <br/>
+                        <strong>Ratings</strong>
+                      </div>
+                      <div class="col-md-5">
+                        <div class="custom-wrapper">
+                          <div class="rate-input-container">
+                            <div class="row">
+                              <div class="rate-input  col-md-2">
+                                <div class="rate-field"> 
+                                  <input type="number"
+                                    class="min-rate-input"
+                                    value="{{filters.get('min_rate_input') if filters.get('min_rate_input') !=None else 3}}"
+                                    name="min_rate_input"> 
+                                </div>
+                              </div>
+                              <div class="col-md-8">
+                              </div>
+                              <div class="rate-input  col-md-2">
+                                <div class="rate-field"> 
+                                  <input type="number"
+                                    class="max-rate-input"
+                                    value="{{filters.get('max_rate_input') if filters.get('max_rate_input') !=None else 5}}"
+                                    name="max_rate_input"> 
+                                </div>
+                              </div> 
+                            </div>
+                            <div class="slider-container"> 
+                              <div class="rate-slider"> 
+                              </div> 
+                            </div> 
+                          </div> 
+                          <!-- Slider -->
+                          <div class="range-rate-input"> 
+                            <input type="range"
+                              class="min-rate"
+                              min="0"
+                              max="5"
+                              value="3"
+                              step="1"> 
+                            <input type="range"
+                              class="max-rate"
+                              min="0"
+                              max="5"
+                              value="5"
+                              step="1"> 
+                          </div> 
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-1">
+                        <strong>Sort by</strong>
+                      </div>
+                      <div class="col-md-3">
+                          <select class="form-select form-select-sm" name="sort_by">
+                              <option value="" selected>---Sort by---</option>
+                              {% set sort_by = filters.get('sort_by') %}
+                              <option value="prize_high_low" {{ 'selected' if sort_by == "prize_high_low" else '' }}>Price high to low</option>
+                              <option value="prize_low_high" {{ 'selected' if sort_by == "prize_low_high" else '' }}>Price low to high</option>
+                              <option value="good_rating" {{ 'selected' if sort_by == "good_rating" else '' }}>Rating</option>
+                              <option value="featured" {{ 'selected' if sort_by == "featured" else '' }}>Featured</option>
+                          </select>
+                      </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-success float-end btn-sm">Apply</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
         <div class="row">
             {% if books != None %}
               {% for book in books if books %}
@@ -67,7 +219,7 @@
             <div class="card-footer">
                 <div class="row">
                     <div class="col-md-12">
-                        <a href="/book/list-all" class="btn btn-info float-end"><small>View all</small></a>
+                        <a href="/book/list" class="btn btn-info float-end"><small>View all</small></a>
                     </div>
                 </div>
             </div>

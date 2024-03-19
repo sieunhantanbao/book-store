@@ -29,5 +29,13 @@ def clear_redis_cache(cache_keys: list):
                 redis_client.delete(key)
     except Exception as e:
         print(e)
+
+def is_valid_uuid(value):
+    try:
+        uuid.UUID(str(value))
+
+        return True
+    except ValueError:
+        return False
     
         

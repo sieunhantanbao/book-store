@@ -1,26 +1,27 @@
+from uuid import UUID
 from flask import Request
 from app.website.models.validations.book_validation import BookCreateForm
 from app.website.models.validations.category_validation import CategoryCreateForm
 from app.website.utilities.extensions import allowed_file, upload_file
-from ..models.book import Book
-from ..models.image import Image
-from ..models.book_category import Category
+from ..schemas.book import Book
+from ..schemas.image import Image
+from ..schemas.category import Category
 from datetime import datetime
 from slugify import slugify
-from ... import db_context
+from sqlalchemy.orm import Session
 
-def get_by_id(book_id:int):
-    return Book.query.get(book_id)
+def get_by_id(db: Session, book_id:UUID):
+    return db.query(Book).get(book_id)
 
-def get_all():
+def get_all(db: Session):
     """
     Get all books from database
     """
-    books = Book.query.all()
+    books = db.query(Book).all()
     return books
 
 
-def create(form:BookCreateForm, request:Request):
+def create(db: Session, form:BookCreateForm, request:Request):
     """
     Create a book and save to database
     """
@@ -50,10 +51,10 @@ def create(form:BookCreateForm, request:Request):
             image = Image(url = file_name)
             new_book.images.append(image)
     
-    db_context.session.add(new_book)
-    db_context.session.commit()
+    db.add(new_book)
+    db.commit()
 
-def edit(book_to_edit:Book, request:Request):
+def edit(db: Session, book_to_edit:Book, request:Request):
     """
     Edit a book
     """
@@ -83,9 +84,9 @@ def edit(book_to_edit:Book, request:Request):
     book_to_edit.updated_at = datetime.now()
     book_to_edit.category_id = request.form.get('category_id')
     # Update database
-    db_context.session.commit()
+    db.commit()
 
-def publish(book_to_publish:Book, action:str):
+def publish(db: Session, book_to_publish:Book, action:str):
     """
     Publish or unpublish a book
     """
@@ -95,28 +96,28 @@ def publish(book_to_publish:Book, action:str):
         book_to_publish.is_published = False
     book_to_publish.updated_at = datetime.now()
     # Update database
-    db_context.session.commit()
+    db.commit()
 
 #######################CATEGORY#############################################
-def get_category_by_id(cat_id:int):
-    return Category.query.get(cat_id)
+def get_category_by_id(db: Session, cat_id: UUID):
+    return db.query(Category).get(cat_id)
 
 
-def get_all_categories():
+def get_all_categories(db: Session):
     """
     Get all categories
     """
-    categories = Category.query.all()
+    categories = db.query(Category).all()
     return categories
 
-def get_all_categories_for_ddl():
+def get_all_categories_for_ddl(db: Session):
     """
     Get all categories for dropdownlist
     """
-    categories = db_context.session.query(Category.id, Category.name).options(db_context.undefer('*')).all()
+    categories = db.query(Category.id, Category.name).all()
     return categories
 
-def create_category(form:CategoryCreateForm, request:Request):
+def create_category(db: Session, form:CategoryCreateForm, request:Request):
     """
     Create a Category and save to database
     """
@@ -131,10 +132,10 @@ def create_category(form:CategoryCreateForm, request:Request):
             image = Image(url = file_name)
             new_category.images.append(image)
     
-    db_context.session.add(new_category)
-    db_context.session.commit()
+    db.add(new_category)
+    db.commit()
 
-def edit_category(category_to_edit:Category, request:Request):
+def edit_category(db: Session, category_to_edit:Category, request:Request):
     """
     Edit a Category
     """
@@ -150,4 +151,4 @@ def edit_category(category_to_edit:Category, request:Request):
     category_to_edit.short_description = request.form.get('short_description')
     category_to_edit.updated_at = datetime.now()
     # Update database
-    db_context.session.commit()
+    db.commit()
