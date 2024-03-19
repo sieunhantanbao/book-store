@@ -11,7 +11,7 @@
   <div class="mt-0 mb-5">
     <div class="d-flex justify-content-center row">
       <div class="col-md-12">
-          {{ book.book_list(categories, books, star_rating, wishlists, 'BOOKS', True, request.args) }}
+          {{ book.book_list(books, star_rating, wishlists, 'BOOKS', True, request.args, categories) }}
       </div> <!-- col-md-12 -->
     </div> <!-- d-flex justify-content-center row -->
   </div> <!-- mt-5 mb-5 -->

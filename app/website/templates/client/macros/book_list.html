@@ -1,9 +1,10 @@
-{% macro book_list(categories, books, star_rating, wishlists, title, all, filters) -%}
+{% macro book_list(books, star_rating, wishlists, title, all, filters, categories) -%}
 <div class="card">
     <div class="card-header text-black fw-bold">
       <i class="fas fa-book fa-2xl"></i> {{title}}
     </div>
     <div class="card-body">
+       {% if filters != None %}
         <div class="row">
           <div class="col-md-12 ps-0">
             <br/>
@@ -154,6 +155,7 @@
             </form>
           </div>
         </div>
+        {% endif %}
         <div class="row">
             {% if books != None %}
               {% for book in books if books %}
