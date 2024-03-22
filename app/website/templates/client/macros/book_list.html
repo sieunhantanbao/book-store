@@ -16,7 +16,7 @@
                           <strong>Keyword</strong>
                         </div>
                         <div class="col-md-5">
-                          <input type="text" class="form-control form-control-sm" placeholder="Keyword" name="keyword" value="{{ filters.get('keyword') }}"/>
+                          <input type="text" class="form-control form-control-sm" placeholder="Keyword" name="keyword" value="{{filters.get('keyword') if filters.get('keyword') !=None else ''}}"/>
                         </div>
                         <div class="col-md-1">
                           <strong>Sort by</strong>
