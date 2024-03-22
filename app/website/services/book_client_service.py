@@ -1,6 +1,8 @@
 from uuid import UUID
-from sqlalchemy import desc
+from sqlalchemy import asc, desc, or_
 from sqlalchemy.orm import Session
+
+from app.website.models.dtos.book import BookFilterInputModel
 from ..utilities.extensions import is_valid_uuid
 from ..schemas.book import Book
 from ..schemas.category import Category
@@ -14,12 +16,31 @@ def get_by_id(db: Session, id_or_slug):
     else:
         return db.query(Book).filter_by(slug = id_or_slug, is_published = True).first()
 
-def get_all(db: Session):
+def get_all(db: Session, filter: BookFilterInputModel):
     """
     Get all books
     """
-    books = db.query(Book).filter_by(is_published=True).all()
-    return books
+    query = db.query(Book).filter(Book.is_published == True)
+    # Filter by price
+    query =  query.filter(Book.price >= filter.min_price_input, Book.price <= filter.max_price_input)
+    # Filter by Keyword
+    if filter.keyword !='' and filter.keyword != None:
+        query = query.filter(Book.title.ilike(f"%{filter.keyword}%"))
+    if len(filter.category) > 0:
+        query = query.filter(or_(Book.category_id.in_(filter.category)))
+    # Order by    
+    order_by = desc(Book.created_at)
+    match filter.sort_by:
+        case 'price_high_low':
+            order_by = desc(Book.price)
+        case 'price_low_high':
+            order_by = asc(Book.price)
+        case 'featured':
+            order_by = desc(Book.is_featured)
+    
+    query = query.order_by(order_by)
+    # Return data
+    return query.all()
 
 def get_with_limit(db: Session, size: int):
     """ Get all books with limit
