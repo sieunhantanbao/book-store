@@ -24,7 +24,7 @@ def upgrade() -> None:
                     sa.Column('id', sa.UUID, primary_key=True, nullable= False),
                     sa.Column('name', sa.String, nullable=False),
                     sa.Column('slug', sa.String, nullable=False),
-                    sa.Column('short_description', sa.String),
+                    sa.Column('short_description', sa.String, nullable=False),
                     sa.Column('thumbnail_url', sa.String),
                     sa.Column('sort_order', sa.Integer),
                     sa.Column('created_at', sa.DateTime, nullable=False, default=datetime.now()),
@@ -36,7 +36,7 @@ def upgrade() -> None:
                 "id": UUID("D967C683-7A87-4583-A849-4E8DE8A190E2"),
                 "name": "Children Books",
                 "slug": "children-books",
-                "description": "This is description for children book category",
+                "short_description": "This is description for children book category",
                 "sort_order": 0,
                 "created_at": datetime.now()
             },
@@ -44,7 +44,7 @@ def upgrade() -> None:
                 "id": UUID("C4028EA3-29F3-4E57-BBE6-17EE8A172564"),
                 "name": "Animals Books",
                 "slug": "animals-books",
-                "description": "This is description for animals book category",
+                "short_description": "This is description for animals book category",
                 "sort_order": 0,
                 "created_at": datetime.now()
             },
@@ -52,7 +52,7 @@ def upgrade() -> None:
                 "id": UUID("3DC81F23-1691-437C-AB95-19E77781A19A"),
                 "name": "Science Books",
                 "slug": "science-books",
-                "description": "This is description for Science book category",
+                "short_description": "This is description for Science book category",
                 "sort_order": 0,
                 "created_at": datetime.now()
             },
@@ -60,7 +60,7 @@ def upgrade() -> None:
                 "id": UUID("D62FD3DD-D186-45B8-B0BB-188BE89E5430"),
                 "name": "Universe Books",
                 "slug": "universe-books",
-                "description": "This is description for Universe book category",
+                "short_description": "This is description for Universe book category",
                 "sort_order": 0,
                 "created_at": datetime.now()
             },
@@ -68,7 +68,7 @@ def upgrade() -> None:
                 "id": UUID("7328775F-F4EB-49C1-9CC3-B344CC6C7EA3"),
                 "name": "The World Books",
                 "slug": "the-world-books",
-                "description": "This is description for the world book category",
+                "short_description": "This is description for the world book category",
                 "sort_order": 0,
                 "created_at": datetime.now()
             },
@@ -76,7 +76,7 @@ def upgrade() -> None:
                 "id": UUID("3786AB21-B10B-47BF-86C8-0F425CC1D4DB"),
                 "name": "Technology Books",
                 "slug": "technology-books",
-                "description": "This is a category for Technologies",
+                "short_description": "This is a category for Technologies",
                 "sort_order": 0,
                 "created_at": datetime.now()
             },
@@ -84,7 +84,7 @@ def upgrade() -> None:
                 "id": UUID("274425A6-610F-403B-91E5-5C1A3D926E09"),
                 "name": "Travelling Books",
                 "slug": "travelling-books",
-                "description": "This is a category for Travelling",
+                "short_description": "This is a category for Travelling",
                 "sort_order": 0,
                 "created_at": datetime.now()
             },
@@ -92,7 +92,7 @@ def upgrade() -> None:
                 "id": UUID("F7570BE3-3C99-46D7-A4DD-656E3F1EDA71"),
                 "name": "Fictions Books",
                 "slug": "fictions-books",
-                "description": "This is the category for fiction books",
+                "short_description": "This is the category for fiction books",
                 "sort_order": 0,
                 "created_at": datetime.now()
             }

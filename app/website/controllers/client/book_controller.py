@@ -4,8 +4,8 @@ from app import redis_client
 import json
 from app.database import get_db_context
 from app.website.models.constants import constants
-
 from sqlalchemy.orm import Session
+from app.website.models.dtos.book import BookFilterInputModel
 
 from ...services import book_client_service as _book_service, rating_client_service as _rating_service, wishlist_service as _wishlist_service
 book = Blueprint('book', __name__)
@@ -52,7 +52,18 @@ def book_list():
     """
     Get all books
     """
-    books = _book_service.get_all(db)
+    # Create an instance of BookFilterInputModel
+    filter = BookFilterInputModel(
+        keyword=request.args.get('keyword'),
+        category=request.args.getlist('category'),
+        min_price_input=float(request.args.get('min_price_input', 0)),
+        max_price_input=float(request.args.get('max_price_input')),
+        min_rate_input=int(request.args.get('min_rate_input', 0)),
+        max_rate_input=int(request.args.get('max_rate_input', 5)),
+        sort_by=request.args.get('sort_by')
+    )
+    
+    books = _book_service.get_all(db, filter)
     book_ids = [book.id for book in books]
     book_average_ratings = _rating_service.get_all_average_rating(db, book_ids)
     for book in books:
@@ -63,6 +74,13 @@ def book_list():
         else:
             book.average_rating_value = None
             book.total_ratings = None
+    # Filter by rating
+    books = [book for book in books if book.average_rating_value >= filter.min_rate_input and book.average_rating_value <= filter.max_rate_input]
+    
+    # Sort by rating
+    sort_by = True if filter.sort_by == "good_rating" else False
+    if sort_by:
+        books.sort(key=lambda x: x.average_rating_value, reverse=True)
             
     categories = _book_service.get_all_categories(db)
     for category in categories:

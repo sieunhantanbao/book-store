@@ -11,6 +11,27 @@
             <form method="GET" action="/book/list">
               <div class="card">
                 <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-1">
+                          <strong>Keyword</strong>
+                        </div>
+                        <div class="col-md-5">
+                          <input type="text" class="form-control form-control-sm" placeholder="Keyword" name="keyword" value="{{ filters.get('keyword') }}"/>
+                        </div>
+                        <div class="col-md-1">
+                          <strong>Sort by</strong>
+                        </div>
+                        <div class="col-md-5">
+                            <select class="form-select form-select-sm" name="sort_by">
+                                <option value="" selected>---Sort by---</option>
+                                {% set sort_by = filters.get('sort_by') %}
+                                <option value="price_high_low" {{ 'selected' if sort_by == "price_high_low" else '' }}>Price high to low</option>
+                                <option value="price_low_high" {{ 'selected' if sort_by == "price_low_high" else '' }}>Price low to high</option>
+                                <option value="good_rating" {{ 'selected' if sort_by == "good_rating" else '' }}>Good Rating</option>
+                                <option value="featured" {{ 'selected' if sort_by == "featured" else '' }}>Featured book</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-1">
                           <br/>
@@ -130,21 +151,6 @@
                               step="1"> 
                           </div> 
                         </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-1">
-                        <strong>Sort by</strong>
-                      </div>
-                      <div class="col-md-3">
-                          <select class="form-select form-select-sm" name="sort_by">
-                              <option value="" selected>---Sort by---</option>
-                              {% set sort_by = filters.get('sort_by') %}
-                              <option value="prize_high_low" {{ 'selected' if sort_by == "prize_high_low" else '' }}>Price high to low</option>
-                              <option value="prize_low_high" {{ 'selected' if sort_by == "prize_low_high" else '' }}>Price low to high</option>
-                              <option value="good_rating" {{ 'selected' if sort_by == "good_rating" else '' }}>Rating</option>
-                              <option value="featured" {{ 'selected' if sort_by == "featured" else '' }}>Featured</option>
-                          </select>
                       </div>
                     </div>
                 </div>
