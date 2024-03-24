@@ -6,6 +6,7 @@ from app.database import get_db_context
 from app.website.models.constants import constants
 from sqlalchemy.orm import Session
 from app.website.models.dtos.book import BookFilterInputModel
+from app.website.schemas.book import Book
 
 from ...services import book_client_service as _book_service, rating_client_service as _rating_service, wishlist_service as _wishlist_service
 book = Blueprint('book', __name__)
@@ -44,8 +45,35 @@ def book_detail(id_or_slug):
 
     # Book comments
     book_comments = _rating_service.get_book_comments(db, book.id)
-
-    return render_template('client/book_detail.html', book = book, rating_statistic = data, book_comments = book_comments, user=current_user)
+    
+    # Book in the same category
+    books_in_cat = _book_service.get_by_cat(db, book.category_id, constants.NUMBER_OF_BOOK_IN_THE_SAME_CAT_BOOK_DETAIL_PAGE, book.id)
+    __build_book_ratings(books_in_cat)
+    # Book related
+    related_books = _book_service.get_related_books(db, book.id)
+    __build_book_ratings(related_books)
+            
+    # Book wishlist        
+    if current_user!= None and current_user.is_authenticated:
+        wishlists = _wishlist_service.get_all(db, current_user.id)
+        if wishlists:
+            wishlists = [wishlist.book_id for wishlist in wishlists]
+            return render_template('client/book_detail.html', 
+                           book = book,
+                           books_in_cat = books_in_cat,
+                           wishlists = wishlists,
+                           rating_statistic = data,
+                           book_comments = book_comments,
+                           related_books = related_books,
+                           user=current_user)
+    
+    return render_template('client/book_detail.html', 
+                           book = book,
+                           books_in_cat = books_in_cat,
+                           rating_statistic = data,
+                           book_comments = book_comments,
+                           related_books = related_books,
+                           user=current_user)
 
 @book.route('/list')
 def book_list():
@@ -64,16 +92,7 @@ def book_list():
     )
     
     books = _book_service.get_all(db, filter)
-    book_ids = [book.id for book in books]
-    book_average_ratings = _rating_service.get_all_average_rating(db, book_ids)
-    for book in books:
-        average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
-        if average_rating:
-            book.average_rating_value = average_rating[0].average_rating_value
-            book.total_ratings = average_rating[0].total_ratings
-        else:
-            book.average_rating_value = None
-            book.total_ratings = None
+    __build_book_ratings(books)
     # Filter by rating
     books = [book for book in books if book.average_rating_value >= filter.min_rate_input and book.average_rating_value <= filter.max_rate_input]
     
@@ -113,16 +132,7 @@ def my_book_wishlist():
     """
     results = _book_service.get_book_wishlists(db, current_user.id)
     books = [result.Book for result in results]
-    book_ids = [book.id for book in books]
-    book_average_ratings = _rating_service.get_all_average_rating(db, book_ids)
-    for book in books:
-        average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
-        if average_rating:
-            book.average_rating_value = average_rating[0].average_rating_value
-            book.total_ratings = average_rating[0].total_ratings
-        else:
-            book.average_rating_value = None
-            book.total_ratings = None
+    __build_book_ratings(books)
         
     return render_template('client/wishlist.html', books = books ,user = current_user)
 
@@ -143,16 +153,7 @@ def category_detail(id_or_slug):
         abort(404)
         
     books = _book_service.get_by_cat(db, category.id)
-    book_ids = [book.id for book in books]
-    book_average_ratings = _rating_service.get_all_average_rating(db, book_ids)
-    for book in books:
-        average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
-        if average_rating:
-            book.average_rating_value = average_rating[0].average_rating_value
-            book.total_ratings = average_rating[0].total_ratings
-        else:
-            book.average_rating_value = None
-            book.total_ratings = None
+    __build_book_ratings(books)
     
     if current_user!= None and current_user.is_authenticated:
         wishlists = _wishlist_service.get_all(db, current_user.id)
@@ -168,6 +169,18 @@ def category_detail(id_or_slug):
                             category = category,
                             books = books,
                             user = None)
+        
+def __build_book_ratings(books: list[Book]):
+    book_ids = [book.id for book in books]
+    book_average_ratings = _rating_service.get_all_average_rating(db, book_ids)
+    for book in books:
+        book_average_rating = [book_average_rating for book_average_rating in book_average_ratings if book_average_rating.book_id == book.id]
+        if book_average_rating:
+            book.average_rating_value = book_average_rating[0].average_rating_value
+            book.total_ratings = book_average_rating[0].total_ratings
+        else:
+            book.average_rating_value = None
+            book.total_ratings = None
 ############### APIs ##################################
 @book.route('/api/add-wishlist', methods=['POST'])
 @login_required

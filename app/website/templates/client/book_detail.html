@@ -1,5 +1,6 @@
 {% extends "common/layout.html" %} 
 {% import "common/macros/star_rating.html" as star_rating %}
+{% import "client/macros/book_list.html" as book_component %}
 
 {% block style %}
   <style>
@@ -30,7 +31,6 @@
                   {% endif %}
                 {% endfor %}
               </div>
-              
           </div>
           <div class="col-md-6" style="box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);margin-left: 12px;">
             <figure>
@@ -113,6 +113,19 @@
                   <button class="btn ms-2 w-90 mb-2 btn-danger add-to-wishlist disabled" data-id="{{book.id}}" type="button"><i class="far fa-heart fa-2xl"></i></button>
                 {% endif %}
           </div>
+      </div>
+      <hr/>
+      {% if related_books != None and related_books | length > 0%}
+        <div class="row">
+          <div class="col-md-12">
+            {{ book_component.book_list(related_books, star_rating, wishlists, 'RELATED BOOKS', True, None, None) }}
+          </div>
+        </div>
+      {% endif %}
+      <div class="row">
+        <div class="col-md-12">
+          {{ book_component.book_list(books_in_cat, star_rating, wishlists, 'BOOKS IN SAME CATEGORY', True, None, None) }}
+        </div>
       </div>
       <hr/>
       <!--Customer review-->
