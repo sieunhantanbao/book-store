@@ -3,6 +3,7 @@ from sqlalchemy import asc, desc, or_
 from sqlalchemy.orm import Session
 
 from app.website.models.dtos.book import BookFilterInputModel
+from app.website.schemas.book_relation import BookRelation
 from ..utilities.extensions import is_valid_uuid
 from ..schemas.book import Book
 from ..schemas.category import Category
@@ -55,12 +56,16 @@ def get_with_limit(db: Session, size: int):
     books = db.query(Book).filter(Book.is_published==True).order_by(desc(Book.created_at)).limit(size).all()
     return books
 
-def get_by_cat(db: Session, cat_id: UUID):
+def get_by_cat(db: Session, cat_id: UUID, size: int = 0, excluded_id: UUID = None):
     """
     Get all books by the Category
     """
-    books = db.query(Book).filter(Book.is_published==True, Book.category_id==cat_id).all()
-    return books
+    query = db.query(Book).filter(Book.is_published==True, Book.category_id==cat_id)
+    if excluded_id != None:
+        query = query.filter(Book.id != excluded_id)
+    if size != 0:
+        return query.limit(size).all()
+    return query.all()
 
 def get_all_categories(db: Session, size: int = 0):
     """
@@ -92,3 +97,23 @@ def get_featured(db: Session, size: int):
     books = db.query(Book).filter(Book.is_published==True, Book.is_featured==True).order_by(desc(Book.created_at)).limit(size).all()
     return books
 
+def get_related_books(db: Session, book_id: UUID):
+    related_books = (
+        db.query(Book)
+        .join(
+            BookRelation,
+            or_(
+                Book.id == BookRelation.book_id_1,
+                Book.id == BookRelation.book_id_2
+            )
+        )
+        .filter(
+            or_(
+                BookRelation.book_id_1 == book_id,
+                BookRelation.book_id_2 == book_id
+            ),
+            Book.id != book_id
+        )
+        .all()
+    )
+    return related_books
