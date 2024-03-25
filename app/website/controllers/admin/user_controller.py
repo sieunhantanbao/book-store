@@ -10,14 +10,24 @@ db = next(get_db_context())
 @admin_user.route('/', methods=['GET'])
 @login_required
 def list():
+    """ Get list users
+
+    Returns:
+        _type_: _description_
+    """
     if current_user.is_authenticated:
         users = _user_service.get_all(db)
         return render_template('admin/user_list.html', users = users, user = current_user)
     return redirect(url_for('auth.login'))
 
-@admin_user.route('/create', methods=['GET'])
+@admin_user.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    """ Create a new user
+
+    Returns:
+        _type_: _description_
+    """
     if current_user.is_authenticated:
         return render_template('admin/user_create.html', user = current_user)
     return redirect(url_for('auth.login'))

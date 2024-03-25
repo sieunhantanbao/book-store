@@ -10,20 +10,38 @@ from datetime import datetime
 from slugify import slugify
 from sqlalchemy.orm import Session
 
-def get_by_id(db: Session, book_id:UUID):
+def get_by_id(db: Session, book_id:UUID) -> Book:
+    """ Get book by Id
+
+    Args:
+        db (Session): Db context
+        book_id (UUID): Book Id
+
+    Returns:
+        Book: A book
+    """
     return db.query(Book).get(book_id)
 
-def get_all(db: Session):
-    """
-    Get all books from database
+def get_all(db: Session) -> list[Book]:
+    """ Get all books
+
+    Args:
+        db (Session): Db context
+
+    Returns:
+        list[Book]: A list of books
     """
     books = db.query(Book).all()
     return books
 
 
 def create(db: Session, form:BookCreateForm, request:Request):
-    """
-    Create a book and save to database
+    """ Create a new book
+
+    Args:
+        db (Session): Db context
+        form (BookCreateForm): Form data
+        request (Request): Request data
     """
     new_book = Book(title = form.title.data,
                     short_description = form.short_description.data,
@@ -55,8 +73,12 @@ def create(db: Session, form:BookCreateForm, request:Request):
     db.commit()
 
 def edit(db: Session, book_to_edit:Book, request:Request):
-    """
-    Edit a book
+    """ Edit a book
+
+    Args:
+        db (Session): Db context
+        book_to_edit (Book): Book id to edit
+        request (Request): Request data
     """
     publish_date = request.form.get('publish_date')
     if publish_date != None and publish_date !='':
@@ -87,8 +109,12 @@ def edit(db: Session, book_to_edit:Book, request:Request):
     db.commit()
 
 def publish(db: Session, book_to_publish:Book, action:str):
-    """
-    Publish or unpublish a book
+    """ Publish a book
+
+    Args:
+        db (Session): Db context
+        book_to_publish (Book): Book to publish
+        action (str): Action: publish
     """
     if action.lower() == 'publish':
         book_to_publish.is_published = True
@@ -99,27 +125,47 @@ def publish(db: Session, book_to_publish:Book, action:str):
     db.commit()
 
 #######################CATEGORY#############################################
-def get_category_by_id(db: Session, cat_id: UUID):
+def get_category_by_id(db: Session, cat_id: UUID) -> Category:
+    """ Get category by Id
+
+    Args:
+        db (Session): Db context
+        cat_id (UUID): Category Id
+
+    Returns:
+        Category: Category object
+    """
     return db.query(Category).get(cat_id)
 
 
-def get_all_categories(db: Session):
-    """
-    Get all categories
+def get_all_categories(db: Session) -> list[Category]:
+    """ Get all categories
+
+    Returns:
+        list[Category]:: A list of categories
     """
     categories = db.query(Category).all()
     return categories
 
 def get_all_categories_for_ddl(db: Session):
-    """
-    Get all categories for dropdownlist
+    """ Get categories to be used by dropdownlist
+
+    Args:
+        db (Session): Db context
+
+    Returns:
+        _type_: Key/value of Categories
     """
     categories = db.query(Category.id, Category.name).all()
     return categories
 
 def create_category(db: Session, form:CategoryCreateForm, request:Request):
-    """
-    Create a Category and save to database
+    """ Create a new Category
+
+    Args:
+        db (Session): Db context
+        form (CategoryCreateForm): Form data
+        request (Request): Request data
     """
     new_category = Category(name = form.name.data,
                     short_description = form.short_description.data,
@@ -136,8 +182,12 @@ def create_category(db: Session, form:CategoryCreateForm, request:Request):
     db.commit()
 
 def edit_category(db: Session, category_to_edit:Category, request:Request):
-    """
-    Edit a Category
+    """ Edit a category
+
+    Args:
+        db (Session): Db context
+        category_to_edit (Category): Category edit data
+        request (Request): Request data
     """
     for file in request.files:
         uploaded_file = request.files[file]

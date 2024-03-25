@@ -13,8 +13,10 @@ db = next(get_db_context())
 @admin_book.route('/', methods=['GET'])
 @login_required
 def list():
-    """
-    Get all books
+    """ Get all books
+
+    Returns:
+        _type_: _description_
     """
     if current_user.is_authenticated:
         books = _book_service.get_all(db)
@@ -25,8 +27,10 @@ def list():
 @admin_book.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    """
-    Create a book
+    """Create a new book
+
+    Returns:
+        _type_: _description_
     """
     if current_user.is_authenticated:
         form = BookCreateForm(request.form)
@@ -45,8 +49,13 @@ def create():
 @admin_book.route('/edit/<book_id>', methods=['GET', 'POST'])
 @login_required
 def edit(book_id):
-    """
-    Edit a book
+    """Edit a book
+    TODO: This should be updated to bind the request to the DTO
+    Args:
+        book_id (_type_): Book Id to edit
+
+    Returns:
+        _type_: _description_
     """
     if current_user.is_authenticated:
         book_to_edit = _book_service.get_by_id(db, book_id)
@@ -69,8 +78,14 @@ def edit(book_id):
 @admin_book.route('/publish/<book_id>/<action>', methods=['PUT'])
 @login_required
 def publish(book_id, action):
-    """
-    Publish/Unpublish a book
+    """ Publish a book
+
+    Args:
+        book_id (_type_): Book id
+        action (_type_): Action type: publish
+
+    Returns:
+        _type_: _description_
     """
     if current_user.is_authenticated:
         book_to_publish = _book_service.get_by_id(db, book_id)

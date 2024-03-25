@@ -75,13 +75,13 @@ def get_book_comments(db: Session, book_id: UUID):
     """ Get book comments
 
     Args:
-        db (Session): _description_
-        book_id (UUID): _description_
+        db (Session): Db context
+        book_id (UUID): Book id
 
     Returns:
         _type_: _description_
     """
-    # book_comments = db_context.session.query(Rating.book_id, Rating.user_id, Rating.comment, Rating.created_at, Rating.rating_value, Rating.user).filter_by(book_id=book_id, is_reviewed=True).order_by(desc(Rating.created_at)).all()
+    
     book_comments = db.query(Rating).filter_by(book_id=book_id, is_reviewed=True).order_by(desc(Rating.created_at)).all()
     return book_comments
 
@@ -89,11 +89,11 @@ def create_or_update(db: Session, user_id: UUID, book_id: UUID, rating_value: fl
     """ Add a Book rating
 
     Args:
-        db (Session): _description_
-        user_id (UUID): _description_
-        book_id (UUID): _description_
-        rating_value (float): _description_
-        review_comment (str): _description_
+        db (Session): Db context
+        user_id (UUID): User Id
+        book_id (UUID): Book id
+        rating_value (float): Rating value
+        review_comment (str): Review comment
 
     Returns:
         _type_: _description_

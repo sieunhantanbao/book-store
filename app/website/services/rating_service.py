@@ -9,7 +9,7 @@ def get_all(db: Session):
     """ Get all ratings and reviews
 
     Args:
-        db (Session): _description_
+        db (Session): Db context
 
     Returns:
         _type_: _description_
@@ -17,16 +17,27 @@ def get_all(db: Session):
     rating_reviews = db.query(Rating).query.order_by(desc(Rating.created_at)).all()
     return rating_reviews
 
-def get_all_pending_approval(db: Session):
-    """
-    Get all pending approval rating comments
+def get_all_pending_approval(db: Session) -> list[Rating]:
+    """ Get all pending Ratings
+
+    Args:
+        db (Session): Db context
+
+    Returns:
+        list[Rating]: A list of pending Ratings
     """
     rating_reviews = db.query(Rating).filter(Rating.is_reviewed==False).order_by(desc(Rating.created_at)).all()
     return rating_reviews
 
-def approve(db: Session, rating_id: UUID):
-    """
-    Approve a rating review
+def approve(db: Session, rating_id: UUID) -> bool:
+    """ Apporve a book rating
+
+    Args:
+        db (Session): Db context
+        rating_id (UUID): Rating id
+
+    Returns:
+        bool: True if success else False
     """
     rating_to_approve = db.query(Rating).filter_by(id=rating_id, is_reviewed =False).first()
     if rating_to_approve:
@@ -36,9 +47,14 @@ def approve(db: Session, rating_id: UUID):
         return True
     return False
 
-def approve_all(db: Session):
-    """
-    Approve all ratings reviews
+def approve_all(db: Session) -> bool:
+    """ Approve all pending Ratings
+
+    Args:
+        db (Session): Db context
+
+    Returns:
+        bool: True if success else False
     """
     try:
         ratings_to_approve = db.query(Rating).filter(Rating.is_reviewed == False).all()
@@ -50,11 +66,15 @@ def approve_all(db: Session):
     except:
         return False
 
-def delete(db: Session, rating_id: UUID):
-    """
-    Delete a review
+def delete(db: Session, rating_id: UUID) -> bool:
+    """ Delete a rating
+
     Args:
-        rating_id (int): Review Id
+        db (Session): Db context
+        rating_id (UUID): Rating id
+
+    Returns:
+        bool: True if success else False
     """
     try:
         rating_to_delete = db.query(Rating).filter(Rating.id == rating_id).first()

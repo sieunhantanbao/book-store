@@ -11,6 +11,13 @@ db = next(get_db_context())
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    """ Login
+    
+    Keyword arguments:
+    argument -- description
+    Return: return_description
+    """
+    
     if current_user.is_authenticated:
          return redirect(url_for('dashboard.home'))
     form = LoginForm(request.form)
@@ -24,11 +31,15 @@ def login():
             return redirect(url_for('dashboard.home'))
     return render_template('common/auth/login.html', form=form, user = current_user)
 
-"""
-Register a new user
-"""
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
+    """ Register a new user
+    
+    Keyword arguments:
+    argument -- description
+    Return: return_description
+    """
+    
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         new_user = _user_service.register(db, form)
@@ -36,21 +47,30 @@ def register():
         return redirect(url_for('dashboard.home'))
     return render_template('common/auth/register.html', form=form, user=current_user)
 
-"""
-Log out
-"""
 @auth.route('/logout')
 @login_required
 def logout():
+    """ Logout
+    
+    Keyword arguments:
+    argument -- description
+    Return: return_description
+    """
+    
     logout_user()
     return redirect(url_for('auth.login'))
 
-"""
-Change password
-"""
+
 @auth.route('/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    """ Change password
+    
+    Keyword arguments:
+    argument -- description
+    Return: return_description
+    """
+    
     form = ChangePasswordForm(request.form)
     if request.method == 'POST' and form.validate():
         user = _user_service.get_by_email(db, current_user.email)
@@ -59,12 +79,17 @@ def change_password():
         return redirect(url_for('auth.login'))
     return render_template('common/auth/change_password.html', form= form, user = current_user)
 
-"""
-Update user profile
-"""
+
 @auth.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
+    """ Update user profile
+    
+    Keyword arguments:
+    argument -- description
+    Return: return_description
+    """
+    
     form = ProfileForm(request.form)
     update_message = ''
     if request.method == 'POST' and form.validate():
@@ -73,12 +98,15 @@ def profile():
         update_message = 'The profile is updated successfully'
     return render_template('common/auth/profile.html',form = form, user = current_user, message = update_message)
 
-"""
-Update user profile photo
-"""
+
 @auth.route('/profile/photo', methods=['POST'])
 @login_required
 def change_profile_photo():
+    """ Update user profile photo
+
+    Returns:
+        _type_: _description_
+    """
     if current_user.is_authenticated:
         user = _user_service.get_by_email(db, current_user.email)
         _user_service.update_profile_photo(db, user, request)

@@ -10,10 +10,11 @@ db = next(get_db_context())
 
 @dashboard.route('/')
 def home():
+    """ Home page
+
+    Returns:
+        _type_: _description_
     """
-    Dashboard page
-    """
-    
     books = _book_service.get_with_limit(db, NUMBER_OF_BOOKS_HOME_PAGE)
     book_ids = [book.id for book in books]
     book_average_ratings = _rating_service.get_all_average_rating(db, book_ids)
