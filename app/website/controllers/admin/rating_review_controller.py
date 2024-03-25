@@ -12,8 +12,10 @@ db = next(get_db_context())
 @admin_rating_review.route('/', methods=['GET'])
 @login_required
 def list():
-    """
-    Get all Rating reviews
+    """ Get book ratings
+
+    Returns:
+        _type_: _description_
     """
     if current_user.is_authenticated:
         rating_reviews = _rating_service.get_all_pending_approval(db)
@@ -22,9 +24,14 @@ def list():
 
 @admin_rating_review.route('/approve/<rating_id>', methods=['POST'])
 @login_required
-def approve(rating_id: UUID, ):
-    """
-    API to approve a review
+def approve(rating_id: UUID):
+    """ Approve book rating
+
+    Args:
+        rating_id (UUID): Rating Id
+
+    Returns:
+        _type_: _description_
     """
     if current_user.is_authenticated:
         success = _rating_service.approve(db, rating_id)
@@ -33,9 +40,14 @@ def approve(rating_id: UUID, ):
 
 @admin_rating_review.route('/delete/<rating_id>', methods=['POST'])
 @login_required
-def delete(rating_id, ):
-    """
-    API to approve a review
+def delete(rating_id):
+    """ Delete a rating comment
+
+    Args:
+        rating_id (_type_): Rating Id
+
+    Returns:
+        _type_: _description_
     """
     if current_user.is_authenticated:
         success = _rating_service.delete(db, rating_id)
@@ -45,8 +57,10 @@ def delete(rating_id, ):
 @admin_rating_review.route('/approve-all/', methods=['POST'])
 @login_required
 def approve_all():
-    """
-    API to approve all reviews
+    """Approve all pending ratings
+
+    Returns:
+        _type_: _description_
     """
     if current_user.is_authenticated:
         success = _rating_service.approve_all(db)

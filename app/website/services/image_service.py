@@ -3,13 +3,14 @@ from ..schemas.image import Image
 from sqlalchemy.orm import Session
 
 def delete(db: Session, id:UUID):
-    """
-    Delete an image by Id
+    """ Delete an image by Id
+
     Args:
-        id (int): Id of the image
+        db (Session): Db context
+        id (UUID): Id of the image
 
     Returns:
-        _type_: True if success else False
+        _type_: _description_
     """
     try:
         image = db.query(Image).get(id)

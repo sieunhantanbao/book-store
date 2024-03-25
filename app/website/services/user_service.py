@@ -7,22 +7,39 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 
-def get_all(db: Session):
-    """
-    Get all users from database
+def get_all(db: Session) -> list[User]:
+    """ Get all users
+
+    Args:
+        db (Session): Db context
+
+    Returns:
+        list[User]: List of users
     """
     users = db.query(User).all()
     return users
 
-def get_by_email(db: Session, email:str):
-    """
-    Get Active User by Email
+def get_by_email(db: Session, email:str) -> User:
+    """ Get user by Email
+
+    Args:
+        db (Session): Db context
+        email (str): Email of the user
+
+    Returns:
+        User: User object
     """
     return db.query(User).filter_by(email=email, is_active=True).first()
 
 def register(db: Session, form:RegistrationForm):
-    """
-    Register a new user
+    """ Register a new user
+
+    Args:
+        db (Session): Db context
+        form (RegistrationForm): Form data
+
+    Returns:
+        _type_: _description_
     """
     password_hashed = generate_password_hash(form.password.data)
     new_user = User(email = form.email.data, 
@@ -35,8 +52,12 @@ def register(db: Session, form:RegistrationForm):
     return new_user
 
 def change_password(db: Session, user:User, form:ChangePasswordForm):
-    """
-    Update user password
+    """ Change password
+
+    Args:
+        db (Session): Db context
+        user (User): User object to change
+        form (ChangePasswordForm): Form data
     """
     password_hashed = generate_password_hash(form.new_password.data)
     user.password = password_hashed
@@ -44,8 +65,13 @@ def change_password(db: Session, user:User, form:ChangePasswordForm):
     db.commit()
 
 def update(db: Session, user:User, form:ProfileForm, request:Request):
-    """
-    Update user profile
+    """ Update user profile
+
+    Args:
+        db (Session): Db context
+        user (User): User object
+        form (ProfileForm): Form data
+        request (Request): Request data
     """
     user.first_name = form.first_name.data
     user.last_name = form.last_name.data
@@ -60,8 +86,12 @@ def update(db: Session, user:User, form:ProfileForm, request:Request):
     db.commit()
 
 def update_profile_photo(db: Session, user: User, request:Request):
-    """
-    User user profile photo
+    """ Update user profile
+
+    Args:
+        db (Session): Db context
+        user (User): User object to update
+        request (Request): Request data
     """
     if 'file' in request.files:
         uploaded_file = request.files['file']

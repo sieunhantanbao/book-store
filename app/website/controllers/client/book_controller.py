@@ -14,8 +14,13 @@ db = next(get_db_context())
 
 @book.route('/detail/<id_or_slug>')
 def book_detail(id_or_slug):
-    """
-    Get a book detail
+    """ Get a book detail
+
+    Args:
+        id_or_slug (_type_): Id of slug of the book
+
+    Returns:
+        _type_: _description_
     """
     book = _book_service.get_by_id(db, id_or_slug)
     if not book:
@@ -47,7 +52,7 @@ def book_detail(id_or_slug):
     book_comments = _rating_service.get_book_comments(db, book.id)
     
     # Book in the same category
-    books_in_cat = _book_service.get_by_cat(db, book.category_id, constants.NUMBER_OF_BOOK_IN_THE_SAME_CAT_BOOK_DETAIL_PAGE, book.id)
+    books_in_cat = _book_service.get_books_by_cat(db, book.category_id, constants.NUMBER_OF_BOOK_IN_THE_SAME_CAT_BOOK_DETAIL_PAGE, book.id)
     __build_book_ratings(books_in_cat)
     # Book related
     related_books = _book_service.get_related_books(db, book.id)
@@ -77,8 +82,10 @@ def book_detail(id_or_slug):
 
 @book.route('/list')
 def book_list():
-    """
-    Get all books
+    """ Get all books with filtering
+
+    Returns:
+        _type_: _description_
     """
     # Create an instance of BookFilterInputModel
     filter = BookFilterInputModel(
@@ -127,8 +134,10 @@ def book_list():
 @book.route('/wishlist', methods = ['GET'])
 @login_required
 def my_book_wishlist():
-    """
-    Get all my wishlist
+    """ Get book's wishlist
+
+    Returns:
+        _type_: _description_
     """
     results = _book_service.get_book_wishlists(db, current_user.id)
     books = [result.Book for result in results]
@@ -138,21 +147,30 @@ def my_book_wishlist():
 
 @book.route('/categories/all', methods = ['GET'])
 def all_categories():
+    """ Get all categories
+    
+    Keyword arguments:
+    argument -- description
+    Return: return_description
     """
-    Get all book categories
-    """        
+     
     return render_template('client/category.html', user = current_user)
 
 @book.route('/categories/<id_or_slug>', methods = ['GET'])
 def category_detail(id_or_slug):
-    """
-    Get the category detail by id or slug
+    """ Get category detail by Id or slug
+
+    Args:
+        id_or_slug (_type_): Id of slug of the category
+
+    Returns:
+        _type_: _description_
     """
     category = _book_service.get_category_by_id(db, id_or_slug)
     if not category:
         abort(404)
         
-    books = _book_service.get_by_cat(db, category.id)
+    books = _book_service.get_books_by_cat(db, category.id)
     __build_book_ratings(books)
     
     if current_user!= None and current_user.is_authenticated:
@@ -185,7 +203,11 @@ def __build_book_ratings(books: list[Book]):
 @book.route('/api/add-wishlist', methods=['POST'])
 @login_required
 def add_to_wishlist():
-    "API to save/add a book to wishlist"
+    """ Add to wishlist
+
+    Returns:
+        _type_: _description_
+    """
     if current_user and current_user.is_authenticated:
         data = request.json
         result = _wishlist_service.create(db, current_user.id, data['book_id'])
@@ -197,7 +219,11 @@ def add_to_wishlist():
 @book.route('/api/remove-wishlist', methods=['POST'])
 @login_required
 def remove_from_wishlist():
-    "API to remove a book from the wishlist"
+    """ API to remove a wishlist
+
+    Returns:
+        _type_: _description_
+    """
     data = request.json
     result = _wishlist_service.delete_by_user_and_book(db, current_user.id, data['book_id'])
     return make_response(jsonify(success=result), 200)
@@ -205,8 +231,10 @@ def remove_from_wishlist():
 @book.route('/api/add-review', methods = ['POST'])
 @login_required
 def add_rating_review():
-    """
-    Create a book rating and review
+    """ Create a book rating
+
+    Returns:
+        _type_: _description_
     """
     if current_user and current_user.is_authenticated:
         data = request.json
@@ -217,8 +245,13 @@ def add_rating_review():
     
 @book.route('/api/star_rating_statistic/<book_id>', methods = ['GET'])
 def get_star_rating_statistic(book_id):
-    """
-    API Get Book Star Rating statistic
+    """API Get Book Star Rating statistic
+
+    Args:
+        book_id (_type_): Book id
+
+    Returns:
+        _type_: _description_
     """
     success, data = __get_star_rating_statistic(db, book_id)
     return make_response(jsonify(success = success, data = data), 200)
@@ -255,8 +288,10 @@ def __get_star_rating_statistic(db: Session, book_id):
 
 @book.route('/api/categories', methods = ['GET'])
 def get_categories():
-    """
-    API Get All Categories with Redis cache
+    """ API Get All Categories with Redis cache
+
+    Returns:
+        _type_: _description_
     """
     get_full = request.args.get('all')
     if get_full != None and get_full == 'False':
@@ -293,8 +328,10 @@ def get_categories():
 
 @book.route('/api/featured-books', methods = ['GET'])
 def get_featured_books():
-    """
-    API Get 10 latest featured books with Redis cache
+    """ API Get 10 latest featured books with Redis cache
+
+    Returns:
+        _type_: _description_
     """
     serialized_featured_books_cached = redis_client.get(constants.REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS)
     if serialized_featured_books_cached == None:
