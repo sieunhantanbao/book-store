@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
 
+from app.website.utilities.extensions import is_admin
+
 admin_dashboard = Blueprint('admin_dashboard', __name__)
 
 @admin_dashboard.route('/', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def admin_dasboard():
      """ Admin dashboard page
 

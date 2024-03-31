@@ -10,6 +10,7 @@ from datetime import datetime
 from alembic import op
 import sqlalchemy as sa
 from uuid import UUID
+from werkzeug.security import generate_password_hash
 
 
 # revision identifiers, used by Alembic.
@@ -33,16 +34,23 @@ def upgrade() -> None:
                     sa.Column('experience_in', sa.String),
                     sa.Column('addition_detail', sa.String),
                     sa.Column('is_active', sa.Boolean, nullable=False, default=True),
+                    sa.Column('is_admin', sa.Boolean, nullable=False, default=False),
                     sa.Column('created_at', sa.DateTime, nullable=False, default=datetime.now()),
                     sa.Column('updated_at', sa.DateTime))
     # Bulk insert
-    usr_data = [
+    usr_admin_data = [
         {
             "id": UUID("F903433E-F36B-1410-922A-00CC96E21CB5"),
             "email": "nguyensieuanh@gmail.com",
             "first_name":"Anh",
-            "last_name":"Nguyen"
-        },
+            "last_name":"Nguyen",
+            "is_admin": True,
+            "password": generate_password_hash("123456")
+        }
+    ]
+    op.bulk_insert(usr_tbl, usr_admin_data)
+    
+    usr_data = [
         {
             "id": UUID("FF03433E-F36B-1410-922A-00CC96E21CB5"),
             "email": "user1@example.com",

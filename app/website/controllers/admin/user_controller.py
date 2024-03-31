@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
 from app.database import get_db_context
+from app.website.utilities.extensions import is_admin
 from ...services import user_service as _user_service
 
 
@@ -9,6 +10,7 @@ db = next(get_db_context())
 
 @admin_user.route('/', methods=['GET'])
 @login_required
+@is_admin
 def list():
     """ Get list users
 
@@ -22,6 +24,7 @@ def list():
 
 @admin_user.route('/create', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def create():
     """ Create a new user
 

@@ -18,6 +18,7 @@ class User(Base, BaseEntity, UserMixin):
     experience_in = Column(String)
     addition_detail = Column(String)
     is_active = Column(Boolean, nullable=False, default = True)
+    is_admin = Column(Boolean, nullable=False, default = False)
     ratings = relationship('Rating', back_populates='user', lazy='immediate')
     
     def get_id(self) -> str:

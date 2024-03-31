@@ -1,5 +1,8 @@
 from cgi import FieldStorage
+from functools import wraps
 import os
+from flask import request, current_app
+from flask_login import current_user
 from werkzeug.utils import secure_filename
 import uuid
 from app import redis_client
@@ -37,5 +40,13 @@ def is_valid_uuid(value):
         return True
     except ValueError:
         return False
-    
+
+def is_admin(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if not current_user.is_admin:
+            return current_app.login_manager.unauthorized()
+        return func(*args, **kwargs)
+
+    return decorated_view
         
