@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, jsonify, make_r
 from flask_login import login_required, current_user
 
 from app.database import get_db_context
+from app.website.utilities.extensions import is_admin
 from ...services import rating_service as _rating_service
 
 
@@ -11,6 +12,7 @@ db = next(get_db_context())
 
 @admin_rating_review.route('/', methods=['GET'])
 @login_required
+@is_admin
 def list():
     """ Get book ratings
 
@@ -24,6 +26,7 @@ def list():
 
 @admin_rating_review.route('/approve/<rating_id>', methods=['POST'])
 @login_required
+@is_admin
 def approve(rating_id: UUID):
     """ Approve book rating
 
@@ -40,6 +43,7 @@ def approve(rating_id: UUID):
 
 @admin_rating_review.route('/delete/<rating_id>', methods=['POST'])
 @login_required
+@is_admin
 def delete(rating_id):
     """ Delete a rating comment
 
@@ -56,6 +60,7 @@ def delete(rating_id):
 
 @admin_rating_review.route('/approve-all/', methods=['POST'])
 @login_required
+@is_admin
 def approve_all():
     """Approve all pending ratings
 

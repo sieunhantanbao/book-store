@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.database import get_db_context
 from app.website.models.constants.constants import REDIS_KEY_CLIENT_LIST_ALL_BOOKS, REDIS_KEY_CLIENT_LIST_FEATURED_BOOKS
 
-from app.website.utilities.extensions import clear_redis_cache
+from app.website.utilities.extensions import clear_redis_cache, is_admin
 from ...services import book_service as _book_service
 from ...models.validations.book_validation import BookCreateForm
 
@@ -12,6 +12,7 @@ db = next(get_db_context())
 
 @admin_book.route('/', methods=['GET'])
 @login_required
+@is_admin
 def list():
     """ Get all books
 
@@ -26,6 +27,7 @@ def list():
 
 @admin_book.route('/create', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def create():
     """Create a new book
 
@@ -48,6 +50,7 @@ def create():
 
 @admin_book.route('/edit/<book_id>', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def edit(book_id):
     """Edit a book
     TODO: This should be updated to bind the request to the DTO
@@ -77,6 +80,7 @@ def edit(book_id):
 
 @admin_book.route('/publish/<book_id>/<action>', methods=['PUT'])
 @login_required
+@is_admin
 def publish(book_id, action):
     """ Publish a book
 

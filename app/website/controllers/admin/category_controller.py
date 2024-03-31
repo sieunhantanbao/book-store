@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, redirect, request, url_for, jsonify, make_response
-from flask.json import dump
 from flask_login import login_required, current_user
 from app.database import get_db_context
 from app.website.models.constants.constants import REDIS_KEY_CLIENT_LIST_ALL_CATEGORIES, REDIS_KEY_CLIENT_LIST_SHORT_CATEGORIES
 
 from app.website.schemas.category import Category
-from app.website.utilities.extensions import clear_redis_cache, remove_file
+from app.website.utilities.extensions import clear_redis_cache, is_admin, remove_file
 from ...services import book_service as _book_service, image_service as _image_service
 from ...models.validations.category_validation import CategoryCreateForm
 
@@ -15,6 +14,7 @@ db = next(get_db_context())
 
 @admin_category.route('/', methods=['GET'])
 @login_required
+@is_admin
 def list() -> list[Category]:
     """Get all categories
 
@@ -29,6 +29,7 @@ def list() -> list[Category]:
 
 @admin_category.route('/create', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def create():
     """Create a category
 
@@ -48,6 +49,7 @@ def create():
 
 @admin_category.route('/edit/<cat_id>', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def edit_category(cat_id):
     """Edit a category
 
@@ -76,6 +78,7 @@ def edit_category(cat_id):
 
 @admin_category.route('/api/image/remove/<image_id>', methods=['DELETE'])
 @login_required
+@is_admin
 def delete_image(image_id):
     """ Delete a category
 
