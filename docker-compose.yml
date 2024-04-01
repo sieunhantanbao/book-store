@@ -67,7 +67,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
-      - WAIT_HOSTS=mypostgres:5432
+      - WAIT_HOSTS=${DB_HOST}:${DB_PORT}
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=30
       - WAIT_HOST_CONNECT_TIMEOUT=30
