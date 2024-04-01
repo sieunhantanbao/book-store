@@ -20,6 +20,7 @@ RUN apt-get -y clean
 # Bundle app source
 COPY . /app
 
+COPY wait /app
 # Script to wait for PostgreSQL
 RUN ["chmod", "+x", "/app/wait"]
 
