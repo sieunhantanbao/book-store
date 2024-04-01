@@ -21,7 +21,7 @@ RUN apt-get -y clean
 COPY . /app
 
 # Script to wait for PostgreSQL
-RUN chmod +x /app/wait-for-it.sh
+RUN ["chmod", "+x", "/app/wait"]
 
 EXPOSE 5000
 # CMD [ "flask", "run","--host","0.0.0.0","--port","5000"]
