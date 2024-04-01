@@ -54,7 +54,7 @@ services:
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
-    command: sh -c "/app/wait-for-it.sh ${DB_HOST}:${DB_PORT} --  alembic upgrade head
+    command: sh -c "/app/wait-for-it.sh ${DB_HOST}:${DB_PORT} --  alembic upgrade head"
     depends_on:
       - mypostgres
     networks:
