@@ -38,7 +38,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - JWT_ALGORITHM=${JWT_ALGORITHM}
     depends_on:
-      - postgres
+      - mypostgres
       - migration
     ports:
       - "5001:5000"
@@ -59,7 +59,7 @@ services:
       - DB_NAME=${DB_NAME}
     command: sh -c "/app/wait-for-postgres.sh && alembic upgrade head"
     depends_on:
-      - postgres
+      - mypostgres
     networks:
       - app-network
 
