@@ -20,5 +20,8 @@ RUN apt-get -y clean
 # Bundle app source
 COPY . /app
 
+# Script to wait for PostgreSQL
+RUN chmod +x /app/wait-for-postgres.sh
+
 EXPOSE 5000
 # CMD [ "flask", "run","--host","0.0.0.0","--port","5000"]
