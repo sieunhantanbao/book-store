@@ -44,7 +44,7 @@ services:
       - "5001:5000"
     networks:
       - app-network
-    command: sh -c "python main.py"
+    command: flask run --host 0.0.0.0
 
   migration:
     build: 
