@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 
 services:
   postgres:
@@ -43,7 +43,7 @@ services:
       - "5001:5000"
     networks:
       - app-network
-    command: sh -c "flask run --host 0.0.0.0 --port 5001"
+    command: sh -c "flask run --host 10.255.17.70 --port 5001"
 
   migration:
     build: 
