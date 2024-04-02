@@ -7,11 +7,14 @@ Create Date: 2024-03-17 14:26:53.035647
 """
 from typing import Sequence, Union
 from datetime import datetime
+import os
+from uuid import UUID
 from alembic import op
 import sqlalchemy as sa
-from uuid import UUID
 from werkzeug.security import generate_password_hash
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # revision identifiers, used by Alembic.
 revision: str = '0a55bd9e958e'
@@ -45,7 +48,7 @@ def upgrade() -> None:
             "first_name":"Anh",
             "last_name":"Nguyen",
             "is_admin": True,
-            "password": generate_password_hash("123456")
+            "password": generate_password_hash(os.environ['DEFAULT_ADMIN_PASSWORD'])
         }
     ]
     op.bulk_insert(usr_tbl, usr_admin_data)
