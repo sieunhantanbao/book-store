@@ -8,8 +8,8 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-    ports:
-      - "${DB_PORT}:5432"
+    # ports:
+    #   - "${DB_PORT}:5432"
     networks:
       - app-network
     volumes:
@@ -18,8 +18,8 @@ services:
   myredis:
     image: redis:latest
     container_name: myredis
-    ports:
-      - "${REDIS_PORT}:6379"
+    # ports:
+    #   - "${REDIS_PORT}:6379"
     networks:
       - app-network
 
@@ -42,7 +42,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PORT=5432
       - DB_NAME=${DB_NAME}
-      - DEFAULT_PASSWORD=${DEFAULT_PASSWORD}
+      - DEFAULT_ADMIN_PASSWORD=${DEFAULT_ADMIN_PASSWORD}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_ALGORITHM=${JWT_ALGORITHM}
     depends_on:
@@ -61,12 +61,15 @@ services:
       dockerfile: Dockerfile
     image: sieunhantanbao/book-store-migration:latest
     environment:
+      - REDIS_HOST=myredis
+      - REDIS_PORT=6379
       - DB_ENGINE=${DB_ENGINE}
       - DB_HOST=mypostgres
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PORT=5432
       - DB_NAME=${DB_NAME}
+      - DEFAULT_ADMIN_PASSWORD=${DEFAULT_ADMIN_PASSWORD}
       - WAIT_HOSTS=mypostgres:5432
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=30
